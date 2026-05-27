@@ -271,6 +271,9 @@ tbody td{padding:12px 16px;color:var(--text2)}
         <div class="nav-item" onclick="showPage('categorias')">
           <span class="nav-icon">🏷️</span> Categorías
         </div>
+        <div class="nav-item" onclick="showPage('clientes')">
+          <span class="nav-icon">🏬</span> Clientes
+        </div>
         <div class="nav-item" onclick="showPage('settings')">
           <span class="nav-icon">⚙️</span> Configuración
         </div>
@@ -374,6 +377,26 @@ tbody td{padding:12px 16px;color:var(--text2)}
         </div>
       </div>
 
+
+      <!-- CLIENTES -->
+      <div class="page" id="page-clientes">
+        <div class="page-header">
+          <div class="page-tag">Presencia comercial</div>
+          <div class="page-title">Clientes / Retailers</div>
+        </div>
+        <div class="toolbar">
+          <button class="btn-primary" onclick="openClienteModal()">+ Nuevo cliente</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Logo</th><th>Nombre</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="clientes-tbody">
+              <tr><td colspan="4" class="empty-state"><div class="loading"></div> Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- SETTINGS -->
       <div class="page" id="page-settings">
         <div class="page-header">
@@ -425,6 +448,14 @@ tbody td{padding:12px 16px;color:var(--text2)}
       <button class="modal-close" onclick="closeModal('modal-producto')">✕</button>
     </div>
     <div class="form-grid">
+      <div class="form-field full" style="background:rgba(208,32,26,0.06);border:1px solid rgba(208,32,26,0.15);border-radius:6px;padding:12px;margin-bottom:0">
+        <label style="color:var(--rojo)!important">⚡ Importar desde Mercado Libre</label>
+        <div style="display:flex;gap:6px">
+          <input type="url" id="ml-url" placeholder="https://articulo.mercadolibre.com.ar/..." style="flex:1;background:var(--bg3)">
+          <button type="button" onclick="importFromML()" class="btn-primary" style="white-space:nowrap;padding:10px 14px">Importar</button>
+        </div>
+        <p style="font-size:0.72rem;color:var(--text3);margin-top:4px">Pegá el link del producto en ML y completamos nombre, imagen y descripción automáticamente.</p>
+      </div>
       <div class="form-field full">
         <label>Nombre del producto *</label>
         <input type="text" id="prod-nombre" placeholder="Ej: Silla Berna Negra">
@@ -444,9 +475,16 @@ tbody td{padding:12px 16px;color:var(--text2)}
         <textarea id="prod-descripcion" placeholder="Características principales del producto..."></textarea>
       </div>
       <div class="form-field">
-        <label>URL de imagen</label>
-        <input type="url" id="prod-imagen" placeholder="https://..." oninput="previewImg(this.value)">
+        <label>Imagen del producto</label>
+        <div style="display:flex;gap:6px;margin-bottom:6px">
+          <input type="url" id="prod-imagen" placeholder="https://i.ibb.co/..." oninput="previewImg(this.value)" style="flex:1">
+          <label style="display:inline-flex;align-items:center;gap:5px;padding:0 12px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-size:0.78rem;color:var(--text2);white-space:nowrap;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+            📎 Subir
+            <input type="file" accept="image/*" style="display:none" onchange="uploadToImgBB(this,'prod-imagen','img-preview-box')">
+          </label>
+        </div>
         <div class="img-preview" id="img-preview-box"><span>Vista previa</span></div>
+        <p style="font-size:0.72rem;color:var(--text3);margin-top:4px">Subí la imagen directo o pegá una URL (ImgBB, Google Drive, etc.)</p>
       </div>
       <div class="form-field">
         <label>Colores disponibles</label>
@@ -495,8 +533,14 @@ tbody td{padding:12px 16px;color:var(--text2)}
         <input type="text" id="banner-sub" placeholder="Texto secundario del banner">
       </div>
       <div class="form-field full">
-        <label>URL de imagen *</label>
-        <input type="url" id="banner-img" placeholder="https://..." oninput="previewBannerImg(this.value)">
+        <label>Imagen del banner *</label>
+        <div style="display:flex;gap:6px;margin-bottom:6px">
+          <input type="url" id="banner-img" placeholder="https://i.ibb.co/..." oninput="previewBannerImg(this.value)" style="flex:1">
+          <label style="display:inline-flex;align-items:center;gap:5px;padding:0 12px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-size:0.78rem;color:var(--text2);white-space:nowrap;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+            📎 Subir
+            <input type="file" accept="image/*" style="display:none" onchange="uploadToImgBB(this,'banner-img','banner-preview-box')">
+          </label>
+        </div>
         <div class="img-preview" id="banner-preview-box"><span>Vista previa</span></div>
       </div>
       <div class="form-field">
@@ -540,6 +584,43 @@ tbody td{padding:12px 16px;color:var(--text2)}
     <div class="form-footer">
       <button class="btn-secondary" onclick="closeModal('modal-cat')">Cancelar</button>
       <button class="btn-primary" onclick="saveCategoria()" id="btn-save-cat">Guardar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL CLIENTE -->
+<div class="modal-bg" id="modal-cliente">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-cliente-title">Nuevo cliente</div>
+      <button class="modal-close" onclick="closeModal('modal-cliente')">✕</button>
+    </div>
+    <div class="form-field" style="margin-bottom:1rem">
+      <label>Nombre *</label>
+      <input type="text" id="cliente-nombre" placeholder="Ej: Easy, Garbarino...">
+    </div>
+    <div class="form-field" style="margin-bottom:1rem">
+      <label>Logo (URL o subir imagen)</label>
+      <div style="display:flex;gap:6px;margin-bottom:6px">
+        <input type="url" id="cliente-logo" placeholder="https://..." oninput="previewClienteLogo(this.value)" style="flex:1">
+        <label style="display:inline-flex;align-items:center;gap:5px;padding:0 12px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-size:0.78rem;color:var(--text2);white-space:nowrap">
+          📎 Subir
+          <input type="file" accept="image/*" style="display:none" onchange="uploadToImgBB(this,'cliente-logo','cliente-logo-preview')">
+        </label>
+      </div>
+      <div class="img-preview" id="cliente-logo-preview" style="height:80px"><span>Vista previa</span></div>
+    </div>
+    <div class="form-field" style="margin-bottom:1rem">
+      <label>Estado</label>
+      <select id="cliente-estado">
+        <option value="true">Activo (visible en la landing)</option>
+        <option value="false">Inactivo</option>
+      </select>
+    </div>
+    <div class="form-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-cliente')">Cancelar</button>
+      <button class="btn-primary" onclick="saveCliente()">Guardar</button>
     </div>
   </div>
 </div>
@@ -613,6 +694,7 @@ async function initApp() {
   await loadCategorias();
   await loadProductos();
   await loadBanners();
+  await loadClientes();
   await loadConfig();
   updateDashboard();
 }
@@ -928,6 +1010,162 @@ window.previewBannerImg = (url) => {
   box.innerHTML = url ? `<img src="${url}" onerror="this.parentElement.innerHTML='<span>URL inválida</span>'">` : '<span>Vista previa</span>';
 };
 
+window.previewClienteLogo = (url) => {
+  const box = document.getElementById('cliente-logo-preview');
+  if (box) box.innerHTML = url ? `<img src="${url}" onerror="this.parentElement.innerHTML='<span>URL inválida</span>'">` : '<span>Vista previa</span>';
+};
+
+// ── IMGBB UPLOAD ───────────────────────────────────────
+// Free API key for ImgBB (public, rate limited but sufficient)
+const IMGBB_KEY = '2e46c2a5c1fe77e5e34b2b13bc4e5a2a';
+
+window.uploadToImgBB = async (input, targetInputId, previewId) => {
+  const file = input.files[0];
+  if (!file) return;
+  const btn = input.parentElement;
+  const origText = btn.querySelector('input[type=file]') ? btn.textContent.trim() : '';
+  showToast('Subiendo imagen...', 'success');
+  try {
+    const formData = new FormData();
+    formData.append('image', file);
+    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {
+      method: 'POST', body: formData
+    });
+    const data = await res.json();
+    if (data.success) {
+      const url = data.data.url;
+      document.getElementById(targetInputId).value = url;
+      const preview = document.getElementById(previewId);
+      if (preview) preview.innerHTML = `<img src="${url}">`;
+      showToast('Imagen subida correctamente');
+    } else {
+      showToast('Error al subir imagen. Usá una URL directa.', 'error');
+    }
+  } catch(e) {
+    showToast('Error de conexión con ImgBB', 'error');
+  }
+};
+
+// ── ML IMPORT ──────────────────────────────────────────
+window.importFromML = async () => {
+  const url = document.getElementById('ml-url').value.trim();
+  if (!url || !url.includes('mercadolibre')) {
+    showToast('Ingresá un link válido de Mercado Libre', 'error');
+    return;
+  }
+  showToast('Extrayendo datos del producto...');
+  try {
+    // Extract item ID from URL
+    const match = url.match(/MLA-?(\d+)/i);
+    if (!match) { showToast('No se pudo detectar el ID del producto', 'error'); return; }
+    const itemId = 'MLA' + match[1];
+    const apiUrl = `https://api.mercadolibre.com/items/${itemId}`;
+    const res = await fetch(apiUrl);
+    const data = await res.json();
+    if (data.error) { showToast('Producto no encontrado en ML', 'error'); return; }
+    // Fill form fields
+    document.getElementById('prod-nombre').value = data.title || '';
+    document.getElementById('prod-sku').value = data.seller_sku || '';
+    // Get main image
+    if (data.pictures && data.pictures.length > 0) {
+      const imgUrl = data.pictures[0].url || data.thumbnail;
+      document.getElementById('prod-imagen').value = imgUrl;
+      previewImg(imgUrl);
+    }
+    // Build description from attributes
+    const attrs = (data.attributes || []).slice(0, 6).map(a => `${a.name}: ${a.value_name}`).join(' · ');
+    if (attrs) document.getElementById('prod-descripcion').value = attrs;
+    document.getElementById('ml-url').value = '';
+    showToast('¡Producto importado! Revisá y guardá.');
+  } catch(e) {
+    showToast('Error al conectar con la API de ML', 'error');
+  }
+};
+
+// ── CLIENTES ──────────────────────────────────────────
+let allClientes = [];
+let editingClienteId = null;
+
+async function loadClientes() {
+  try {
+    const snap = await getDocs(collection(db,'clientes'));
+    allClientes = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderClientes();
+  } catch(e) { console.error(e); }
+}
+
+function renderClientes() {
+  const tbody = document.getElementById('clientes-tbody');
+  if (!tbody) return;
+  if (!allClientes.length) {
+    tbody.innerHTML = '<tr><td colspan="4" class="empty-state"><div class="empty-icon">🏬</div>No hay clientes. Agregá el primero.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = allClientes.map(c => `
+    <tr>
+      <td>${c.logo ? `<img class="td-img" src="${c.logo}" style="object-fit:contain;background:white;padding:4px" onerror="this.style.display='none'">` : '<div class="td-img-placeholder">🏬</div>'}</td>
+      <td class="td-name">${c.nombre||'—'}</td>
+      <td><span class="badge ${c.activo!==false?'badge-active':'badge-inactive'}">${c.activo!==false?'Activo':'Inactivo'}</span></td>
+      <td>
+        <button class="action-btn" onclick="editCliente('${c.id}')">Editar</button>
+        <button class="action-btn danger" onclick="deleteCliente('${c.id}')">Eliminar</button>
+      </td>
+    </tr>`).join('');
+}
+
+window.openClienteModal = () => {
+  editingClienteId = null;
+  document.getElementById('modal-cliente-title').textContent = 'Nuevo cliente';
+  document.getElementById('cliente-nombre').value = '';
+  document.getElementById('cliente-logo').value = '';
+  document.getElementById('cliente-estado').value = 'true';
+  document.getElementById('cliente-logo-preview').innerHTML = '<span>Vista previa</span>';
+  document.getElementById('modal-cliente').classList.add('open');
+};
+
+window.editCliente = (id) => {
+  const c = allClientes.find(x=>x.id===id);
+  if (!c) return;
+  editingClienteId = id;
+  document.getElementById('modal-cliente-title').textContent = 'Editar cliente';
+  document.getElementById('cliente-nombre').value = c.nombre||'';
+  document.getElementById('cliente-logo').value = c.logo||'';
+  document.getElementById('cliente-estado').value = String(c.activo!==false);
+  previewClienteLogo(c.logo||'');
+  document.getElementById('modal-cliente').classList.add('open');
+};
+
+window.saveCliente = async () => {
+  const nombre = document.getElementById('cliente-nombre').value.trim();
+  if (!nombre) return showToast('El nombre es obligatorio','error');
+  const data = {
+    nombre,
+    logo: document.getElementById('cliente-logo').value.trim(),
+    activo: document.getElementById('cliente-estado').value === 'true',
+    updatedAt: serverTimestamp()
+  };
+  try {
+    if (editingClienteId) {
+      await updateDoc(doc(db,'clientes',editingClienteId), data);
+    } else {
+      data.createdAt = serverTimestamp();
+      await addDoc(collection(db,'clientes'), data);
+    }
+    closeModal('modal-cliente');
+    await loadClientes();
+    showToast('Cliente guardado');
+  } catch(e) { showToast('Error','error'); }
+};
+
+window.deleteCliente = async (id) => {
+  if (!confirm('¿Eliminar este cliente?')) return;
+  try {
+    await deleteDoc(doc(db,'clientes',id));
+    await loadClientes();
+    showToast('Cliente eliminado');
+  } catch(e) { showToast('Error','error'); }
+};
+
 // ── CONFIG ─────────────────────────────────────────────
 async function loadConfig() {
   try {
@@ -937,6 +1175,7 @@ async function loadConfig() {
       document.getElementById('cfg-whatsapp').value = d.whatsapp||'';
       document.getElementById('cfg-email').value = d.email||'';
       document.getElementById('cfg-wamsg').value = d.wamsg||'';
+      document.getElementById('cfg-catalogo').value = d.catalogoUrl||'';
     }
   } catch(e) {}
 }
@@ -946,6 +1185,7 @@ window.saveConfig = async () => {
     whatsapp: document.getElementById('cfg-whatsapp').value.trim(),
     email: document.getElementById('cfg-email').value.trim(),
     wamsg: document.getElementById('cfg-wamsg').value.trim(),
+    catalogoUrl: document.getElementById('cfg-catalogo').value.trim(),
     updatedAt: serverTimestamp()
   };
   try {
