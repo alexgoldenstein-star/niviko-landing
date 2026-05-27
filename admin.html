@@ -274,6 +274,9 @@ tbody td{padding:12px 16px;color:var(--text2)}
         <div class="nav-item" onclick="showPage('clientes')">
           <span class="nav-icon">🏬</span> Clientes
         </div>
+        <div class="nav-item" onclick="showPage('contactos')">
+          <span class="nav-icon">📬</span> Contactos
+        </div>
         <div class="nav-item" onclick="showPage('settings')">
           <span class="nav-icon">⚙️</span> Configuración
         </div>
@@ -305,6 +308,10 @@ tbody td{padding:12px 16px;color:var(--text2)}
           <div class="stat-card">
             <div class="stat-num" id="stat-banners">—</div>
             <div class="stat-label">Banners</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="stat-contactos">—</div>
+            <div class="stat-label">Contactos recibidos</div>
           </div>
           <div class="stat-card">
             <div class="stat-num"><span>✓</span></div>
@@ -392,6 +399,33 @@ tbody td{padding:12px 16px;color:var(--text2)}
             <thead><tr><th>Logo</th><th>Nombre</th><th>Estado</th><th>Acciones</th></tr></thead>
             <tbody id="clientes-tbody">
               <tr><td colspan="4" class="empty-state"><div class="loading"></div> Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+      <!-- CONTACTOS -->
+      <div class="page" id="page-contactos">
+        <div class="page-header">
+          <div class="page-tag">Base de datos</div>
+          <div class="page-title">Contactos recibidos</div>
+        </div>
+        <div class="toolbar">
+          <input class="search-input" type="text" placeholder="Buscar por nombre, email..." id="search-contactos" oninput="filterContactos()">
+          <select id="filter-tipo-contacto" class="search-input" style="max-width:200px" onchange="filterContactos()">
+            <option value="">Todos los tipos</option>
+            <option value="cliente">Quiero ser cliente</option>
+            <option value="consulta">Consulta de productos</option>
+            <option value="garantia">Garantías</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Fecha</th><th>Tipo</th><th>Nombre</th><th>Teléfono</th><th>Email</th><th>Mensaje</th></tr></thead>
+            <tbody id="contactos-tbody">
+              <tr><td colspan="6" class="empty-state"><div class="loading"></div> Cargando...</td></tr>
             </tbody>
           </table>
         </div>
@@ -695,6 +729,7 @@ async function initApp() {
   await loadProductos();
   await loadBanners();
   await loadClientes();
+  await loadContactos();
   await loadConfig();
   updateDashboard();
 }
@@ -1176,6 +1211,8 @@ async function loadConfig() {
       document.getElementById('cfg-email').value = d.email||'';
       document.getElementById('cfg-wamsg').value = d.wamsg||'';
       document.getElementById('cfg-catalogo').value = d.catalogoUrl||'';
+      document.getElementById('cfg-instagram').value = d.instagram||'';
+      document.getElementById('cfg-facebook').value = d.facebook||'';
     }
   } catch(e) {}
 }
@@ -1186,12 +1223,59 @@ window.saveConfig = async () => {
     email: document.getElementById('cfg-email').value.trim(),
     wamsg: document.getElementById('cfg-wamsg').value.trim(),
     catalogoUrl: document.getElementById('cfg-catalogo').value.trim(),
+    instagram: document.getElementById('cfg-instagram').value.trim(),
+    facebook: document.getElementById('cfg-facebook').value.trim(),
     updatedAt: serverTimestamp()
   };
   try {
     await setDoc(doc(db,'config','contacto'), data);
     showToast('Configuración guardada');
   } catch(e) { showToast('Error','error'); }
+};
+
+
+// ── CONTACTOS ──────────────────────────────────────────
+let allContactos = [];
+
+async function loadContactos() {
+  try {
+    const snap = await getDocs(query(collection(db,'contactos'), orderBy('fecha','desc')));
+    allContactos = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderContactos(allContactos);
+    // Update dashboard count
+    const el = document.getElementById('stat-contactos');
+    if (el) el.textContent = allContactos.length;
+  } catch(e) { console.error(e); }
+}
+
+function renderContactos(list) {
+  const tbody = document.getElementById('contactos-tbody');
+  if (!tbody) return;
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div class="empty-icon">📬</div>No hay contactos todavía.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map(c => {
+    const fecha = c.fecha ? new Date(c.fecha).toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}) : '—';
+    const tipoLabel = {cliente:'Cliente',consulta:'Consulta',garantia:'Garantía',otro:'Otro'}[c.tipo] || c.tipo || '—';
+    return `<tr>
+      <td style="font-size:0.8rem;color:var(--text3);white-space:nowrap">${fecha}</td>
+      <td><span class="badge badge-active" style="font-size:0.68rem">${tipoLabel}</span></td>
+      <td class="td-name">${c.nombre||'—'}</td>
+      <td style="color:var(--text2);font-size:0.85rem">${c.telefono||'—'}</td>
+      <td style="color:var(--text2);font-size:0.85rem"><a href="mailto:${c.email||''}" style="color:inherit;text-decoration:none">${c.email||'—'}</a></td>
+      <td style="color:var(--text3);font-size:0.8rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${(c.mensaje||'').replace(/"/g,"'")}">${c.mensaje||'—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+window.filterContactos = () => {
+  const q = document.getElementById('search-contactos').value.toLowerCase();
+  const tipo = document.getElementById('filter-tipo-contacto').value;
+  renderContactos(allContactos.filter(c =>
+    (!q || (c.nombre||'').toLowerCase().includes(q) || (c.email||'').toLowerCase().includes(q)) &&
+    (!tipo || c.tipo === tipo)
+  ));
 };
 
 // ── DASHBOARD ──────────────────────────────────────────
