@@ -100,6 +100,14 @@
       backdrop-filter: blur(8px);
     }
     .nav-logo img { height: 32px; display: block; }
+    .logo-text {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-family: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
+      font-weight: 900; font-size: 1.5rem; letter-spacing: 0.05em;
+      text-transform: uppercase; color: #fff; text-decoration: none;
+      line-height: 1;
+    }
+    .logo-dot { width: 7px; height: 7px; border-radius: 50%; background: #c0392b; display: inline-block; margin-left: 1px; flex-shrink: 0; }
     .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
     .nav-links a {
       color: var(--blanco); text-decoration: none;
@@ -244,32 +252,60 @@
     }
 
     /* ─── CATEGORÍAS ─── */
-    #categorias { background: #0d0d0d; }
-    .cats-header { margin-bottom: 3rem; }
+    #categorias { background: #0d0d0d; padding: 5rem 0 0; }
+    .cats-section-header { padding-bottom: 2.5rem; }
     .cats-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 1px;
-      background: #1a1a1a;
+      background: #111;
+    }
+    .cats-grid-row2 {
+      margin-top: 1px;
     }
     .cat-card {
-      background: #0d0d0d;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 2rem 1rem;
+      position: relative;
+      height: 200px;
+      overflow: hidden;
       text-decoration: none;
-      transition: background 0.2s;
+      display: block;
       cursor: pointer;
-      min-height: 130px;
-      border: 1px solid transparent;
-      transition: background 0.2s, border-color 0.2s;
     }
-    .cat-card:hover { background: #161616; border-color: var(--rojo); }
-    .cat-icon { font-size: 1.8rem; margin-bottom: 0.75rem; line-height: 1; }
-    .cat-name {
-      font-family: var(--font-display); font-size: 0.85rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.08em;
-      color: rgba(255,255,255,0.85); text-align: center; line-height: 1.2;
+    .cat-card img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: brightness(0.38) grayscale(0.2);
+      transition: filter 0.4s, transform 0.5s;
+    }
+    .cat-card:hover img { filter: brightness(0.55) grayscale(0); transform: scale(1.05); }
+    .cat-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 55%);
+      z-index: 1;
+    }
+    .cat-card::after {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: var(--rojo);
+      z-index: 2; transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .cat-card:hover::after { transform: scaleX(1); }
+    .cat-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 1rem 1.1rem;
+      z-index: 2;
+    }
+    .cat-eyebrow {
+      font-family: var(--font-display); font-size: 0.6rem; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--rojo); margin-bottom: 0.2rem;
+    }
+    .cat-nombre {
+      font-family: var(--font-display); font-size: 1.1rem; font-weight: 900;
+      text-transform: uppercase; color: #fff; line-height: 1.1;
     }
 
     /* ─── CLIENTES ─── */
@@ -386,7 +422,7 @@
     /* ─── RESPONSIVE ─── */
     @media (max-width: 1024px) {
       .lineas-grid { grid-template-columns: repeat(2, 1fr); }
-      .cats-grid { grid-template-columns: repeat(5, 1fr); }
+      .cats-grid { grid-template-columns: repeat(3, 1fr); }
       .clientes-grid { grid-template-columns: repeat(6, 1fr); }
       .footer-inner { grid-template-columns: 1fr 1fr; }
       .nosotros-inner { grid-template-columns: 1fr; gap: 3rem; }
@@ -397,7 +433,8 @@
       .nav-hamburger { display: block; }
       .lineas-grid { grid-template-columns: repeat(2, 1fr); }
       .linea-card { height: 200px; }
-      .cats-grid { grid-template-columns: repeat(3, 1fr); }
+      .cats-grid { grid-template-columns: repeat(2, 1fr); }
+      .cat-card { height: 160px; }
       .clientes-grid { grid-template-columns: repeat(4, 1fr); }
       .canales-grid { grid-template-columns: 1fr; }
       .nosotros-stats { grid-template-columns: 1fr 1fr; }
@@ -417,13 +454,7 @@
      NAV
 ═══════════════════════════════════════ -->
 <nav>
-  <a href="#hero" class="nav-logo">
-    <!-- LOGO EMBEBIDO BASE64 — reemplazar con el base64 real -->
-    <svg width="100" height="32" viewBox="0 0 100 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <text x="0" y="24" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="28" fill="#ffffff" letter-spacing="1">NIVIKO</text>
-      <circle cx="90" cy="20" r="4" fill="#c0392b"/>
-    </svg>
-  </a>
+  <a href="#hero" class="nav-logo logo-text">NIVIKO<span class="logo-dot"></span></a>
 
   <ul class="nav-links">
     <li><a href="productos.html">Productos</a></li>
@@ -511,68 +542,103 @@
 
 
 <!-- ═══════════════════════════════════════
-     CATEGORÍAS — 5x2 grid (10 categorías exactas)
+     CATEGORÍAS — 5 cols × 2 filas, estilo foto
 ═══════════════════════════════════════ -->
 <section id="categorias">
-  <div class="container">
-    <div class="cats-header">
-      <p class="section-label">Nuestros productos</p>
-      <h2 class="section-title">Categorías</h2>
-    </div>
-    <div class="cats-grid">
-
-      <a class="cat-card" href="productos.html?cat=sillas-hogar">
-        <div class="cat-icon">🪑</div>
-        <div class="cat-name">Sillas de Hogar</div>
-      </a>
-
-      <a class="cat-card" href="productos.html?cat=sillas-oficina">
-        <div class="cat-icon">💼</div>
-        <div class="cat-name">Sillas de Oficina</div>
-      </a>
-
-      <a class="cat-card" href="productos.html?cat=sillas-gamer">
-        <div class="cat-icon">🎮</div>
-        <div class="cat-name">Sillas Gamer</div>
-      </a>
-
-      <a class="cat-card" href="productos.html?cat=soporte-tv">
-        <div class="cat-icon">📺</div>
-        <div class="cat-name">Soporte de TV</div>
-      </a>
-
-      <a class="cat-card" href="productos.html?cat=mesas-plegables">
-        <div class="cat-icon">📐</div>
-        <div class="cat-name">Mesas Plegables</div>
-      </a>
-
-      <a class="cat-card" href="productos.html?cat=electrodomesticos">
-        <div class="cat-icon">🍳</div>
-        <div class="cat-name">Electrodomésticos</div>
-      </a>
-
-      <a class="cat-card" href="productos.html?cat=audio-tecnologia">
-        <div class="cat-icon">🎧</div>
-        <div class="cat-name">Audio y Tecnología</div>
-      </a>
-
-      <a class="cat-card" href="productos.html?cat=muebles-hogar">
-        <div class="cat-icon">🛋️</div>
-        <div class="cat-name">Muebles de Hogar</div>
-      </a>
-
-      <a class="cat-card" href="productos.html?cat=mesas">
-        <div class="cat-icon">🪵</div>
-        <div class="cat-name">Mesas</div>
-      </a>
-
-      <a class="cat-card" href="productos.html?cat=pisos-spc">
-        <div class="cat-icon">🏠</div>
-        <div class="cat-name">Pisos SPC</div>
-      </a>
-
-    </div><!-- /cats-grid -->
+  <div class="cats-section-header container">
+    <p class="section-label">Nuestros productos</p>
+    <h2 class="section-title">Categorías</h2>
   </div>
+
+  <!-- Fila 1: 5 categorías -->
+  <div class="cats-grid">
+
+    <a class="cat-card" href="productos.html?cat=sillas-hogar">
+      <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=70" alt="Sillas de Hogar" loading="lazy" />
+      <div class="cat-info">
+        <div class="cat-eyebrow">Categoría</div>
+        <div class="cat-nombre">Sillas de Hogar</div>
+      </div>
+    </a>
+
+    <a class="cat-card" href="productos.html?cat=sillas-oficina">
+      <img src="https://images.unsplash.com/photo-1541558869434-2840d308329a?w=600&q=70" alt="Sillas de Oficina" loading="lazy" />
+      <div class="cat-info">
+        <div class="cat-eyebrow">Categoría</div>
+        <div class="cat-nombre">Sillas de Oficina</div>
+      </div>
+    </a>
+
+    <a class="cat-card" href="productos.html?cat=sillas-gamer">
+      <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=600&q=70" alt="Sillas Gamer" loading="lazy" />
+      <div class="cat-info">
+        <div class="cat-eyebrow">Categoría</div>
+        <div class="cat-nombre">Sillas Gamer</div>
+      </div>
+    </a>
+
+    <a class="cat-card" href="productos.html?cat=soporte-tv">
+      <img src="https://images.unsplash.com/photo-1593784991095-a205069470b6?w=600&q=70" alt="Soporte de TV" loading="lazy" />
+      <div class="cat-info">
+        <div class="cat-eyebrow">Categoría</div>
+        <div class="cat-nombre">Soporte de TV</div>
+      </div>
+    </a>
+
+    <a class="cat-card" href="productos.html?cat=mesas-plegables">
+      <img src="https://images.unsplash.com/photo-1530018607912-eff2daa1bac4?w=600&q=70" alt="Mesas Plegables" loading="lazy" />
+      <div class="cat-info">
+        <div class="cat-eyebrow">Categoría</div>
+        <div class="cat-nombre">Mesas Plegables</div>
+      </div>
+    </a>
+
+  </div><!-- /fila 1 -->
+
+  <!-- Fila 2: 5 categorías -->
+  <div class="cats-grid cats-grid-row2">
+
+    <a class="cat-card" href="productos.html?cat=electrodomesticos">
+      <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=70" alt="Electrodomésticos" loading="lazy" />
+      <div class="cat-info">
+        <div class="cat-eyebrow">Categoría</div>
+        <div class="cat-nombre">Electrodomésticos</div>
+      </div>
+    </a>
+
+    <a class="cat-card" href="productos.html?cat=audio-tecnologia">
+      <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=70" alt="Audio y Tecnología" loading="lazy" />
+      <div class="cat-info">
+        <div class="cat-eyebrow">Categoría</div>
+        <div class="cat-nombre">Audio y Tecnología</div>
+      </div>
+    </a>
+
+    <a class="cat-card" href="productos.html?cat=muebles-hogar">
+      <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&q=70" alt="Muebles de Hogar" loading="lazy" />
+      <div class="cat-info">
+        <div class="cat-eyebrow">Categoría</div>
+        <div class="cat-nombre">Muebles de Hogar</div>
+      </div>
+    </a>
+
+    <a class="cat-card" href="productos.html?cat=mesas">
+      <img src="https://images.unsplash.com/photo-1577140917170-285929fb55b7?w=600&q=70" alt="Mesas" loading="lazy" />
+      <div class="cat-info">
+        <div class="cat-eyebrow">Categoría</div>
+        <div class="cat-nombre">Mesas</div>
+      </div>
+    </a>
+
+    <a class="cat-card" href="productos.html?cat=pisos-spc">
+      <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=70" alt="Pisos SPC" loading="lazy" />
+      <div class="cat-info">
+        <div class="cat-eyebrow">Categoría</div>
+        <div class="cat-nombre">Pisos SPC</div>
+      </div>
+    </a>
+
+  </div><!-- /fila 2 -->
 </section>
 
 
@@ -758,10 +824,7 @@
   <div class="container">
     <div class="footer-inner">
       <div class="footer-brand">
-        <svg width="90" height="28" viewBox="0 0 100 32" fill="none">
-          <text x="0" y="24" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="28" fill="#ffffff" letter-spacing="1">NIVIKO</text>
-          <circle cx="90" cy="20" r="4" fill="#c0392b"/>
-        </svg>
+        <span class="logo-text" style="font-size:1.3rem;">NIVIKO<span class="logo-dot"></span></span>
         <p>Importadora y distribuidora mayorista argentina. Más de 40 años conectando productos con negocios en todo el país.</p>
       </div>
       <div class="footer-col">
