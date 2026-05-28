@@ -274,6 +274,9 @@ tbody td{padding:12px 16px;color:var(--text2)}
         <div class="nav-item" onclick="showPage('clientes')">
           <span class="nav-icon">🏬</span> Clientes
         </div>
+        <div class="nav-item" onclick="showPage('ordenes')">
+          <span class="nav-icon">📋</span> Órdenes
+        </div>
         <div class="nav-item" onclick="showPage('contactos')">
           <span class="nav-icon">📬</span> Contactos
         </div>
@@ -308,6 +311,10 @@ tbody td{padding:12px 16px;color:var(--text2)}
           <div class="stat-card">
             <div class="stat-num" id="stat-banners">—</div>
             <div class="stat-label">Banners</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="stat-ordenes">—</div>
+            <div class="stat-label">Órdenes recibidas</div>
           </div>
           <div class="stat-card">
             <div class="stat-num" id="stat-contactos">—</div>
@@ -384,6 +391,23 @@ tbody td{padding:12px 16px;color:var(--text2)}
         </div>
       </div>
 
+
+
+      <!-- ORDENES -->
+      <div class="page" id="page-ordenes">
+        <div class="page-header">
+          <div class="page-tag">Pedidos recibidos</div>
+          <div class="page-title">Órdenes de compra</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Fecha</th><th>Empresa</th><th>Contacto</th><th>Tel</th><th>Pago</th><th>Total</th><th>Productos</th></tr></thead>
+            <tbody id="ordenes-tbody">
+              <tr><td colspan="7" class="empty-state"><div class="loading"></div> Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       <!-- CLIENTES -->
       <div class="page" id="page-clientes">
@@ -527,6 +551,10 @@ tbody td{padding:12px 16px;color:var(--text2)}
           <label>Bulto (unidades)</label>
           <input type="number" id="prod-bulto" placeholder="4" min="1">
         </div>
+      </div>
+      <div class="form-field">
+        <label>Precio unitario (ARS)</label>
+        <input type="number" id="prod-precio" placeholder="0" min="0" step="1">
       </div>
       <div class="form-field">
         <label>Estado</label>
@@ -728,6 +756,7 @@ async function initApp() {
   await loadCategorias();
   await loadProductos();
   await loadBanners();
+  await loadOrdenes();
   await loadClientes();
   await loadContactos();
   await loadConfig();
@@ -881,7 +910,7 @@ window.filterProductos = () => {
 window.openProductModal = () => {
   editingProductoId = null;
   document.getElementById('modal-prod-title').textContent = 'Nuevo producto';
-  ['prod-nombre','prod-sku','prod-descripcion','prod-imagen','prod-colores','prod-bulto'].forEach(id=>document.getElementById(id).value='');
+  ['prod-nombre','prod-sku','prod-descripcion','prod-imagen','prod-colores','prod-bulto','prod-precio'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('prod-categoria').value = '';
   document.getElementById('prod-estado').value = 'true';
   document.getElementById('prod-destacado').value = 'false';
@@ -901,6 +930,7 @@ window.editProducto = (id) => {
   document.getElementById('prod-imagen').value = p.imagen||'';
   document.getElementById('prod-colores').value = p.colores||'';
   document.getElementById('prod-bulto').value = p.bulto||'';
+  document.getElementById('prod-precio').value = p.precio||'';
   document.getElementById('prod-estado').value = String(p.activo!==false);
   document.getElementById('prod-destacado').value = String(!!p.destacado);
   previewImg(p.imagen||'');
@@ -920,6 +950,7 @@ window.saveProducto = async () => {
     imagen: document.getElementById('prod-imagen').value.trim(),
     colores: document.getElementById('prod-colores').value.trim(),
     bulto: parseInt(document.getElementById('prod-bulto').value)||null,
+    precio: parseFloat(document.getElementById('prod-precio').value)||null,
     activo: document.getElementById('prod-estado').value === 'true',
     destacado: document.getElementById('prod-destacado').value === 'true',
     updatedAt: serverTimestamp()
@@ -1088,34 +1119,69 @@ window.importFromML = async () => {
     showToast('Ingresá un link válido de Mercado Libre', 'error');
     return;
   }
-  showToast('Extrayendo datos del producto...');
+  showToast('Extrayendo datos...');
   try {
-    // Extract item ID from URL
-    const match = url.match(/MLA-?(\d+)/i);
-    if (!match) { showToast('No se pudo detectar el ID del producto', 'error'); return; }
-    const itemId = 'MLA' + match[1];
-    const apiUrl = `https://api.mercadolibre.com/items/${itemId}`;
-    const res = await fetch(apiUrl);
+    // Extract MLA item ID from various URL formats
+    const match = url.match(/MLA-?(\d+)/i) || url.match(/\/(\d{7,12})(?:[#?]|$)/);
+    if (!match) { showToast('No se pudo detectar el ID. Copiá la URL completa del producto.', 'error'); return; }
+    const itemId = 'MLA' + match[1].replace(/\D/g,'');
+    // ML public API — no auth needed for public listings
+    const res = await fetch(`https://api.mercadolibre.com/items/${itemId}`, {
+      headers: { 'Accept': 'application/json' }
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
-    if (data.error) { showToast('Producto no encontrado en ML', 'error'); return; }
-    // Fill form fields
+    if (data.error) { showToast('Producto no encontrado: ' + (data.message||data.error), 'error'); return; }
     document.getElementById('prod-nombre').value = data.title || '';
-    document.getElementById('prod-sku').value = data.seller_sku || '';
-    // Get main image
-    if (data.pictures && data.pictures.length > 0) {
-      const imgUrl = data.pictures[0].url || data.thumbnail;
-      document.getElementById('prod-imagen').value = imgUrl;
-      previewImg(imgUrl);
-    }
-    // Build description from attributes
-    const attrs = (data.attributes || []).slice(0, 6).map(a => `${a.name}: ${a.value_name}`).join(' · ');
+    // Best image: use https version
+    const pic = data.pictures?.[0]?.url || data.thumbnail || '';
+    const imgUrl = pic.replace('http://','https://');
+    if (imgUrl) { document.getElementById('prod-imagen').value = imgUrl; previewImg(imgUrl); }
+    // Attributes as description
+    const attrs = (data.attributes||[])
+      .filter(a=>a.value_name && a.value_name!=='N/A')
+      .slice(0,5).map(a=>`${a.name}: ${a.value_name}`).join(' | ');
     if (attrs) document.getElementById('prod-descripcion').value = attrs;
+    // Price if available
+    if (data.price) document.getElementById('prod-precio') && (document.getElementById('prod-precio').value = data.price);
     document.getElementById('ml-url').value = '';
-    showToast('¡Producto importado! Revisá y guardá.');
+    showToast('✓ Importado: ' + (data.title||'').slice(0,40));
   } catch(e) {
-    showToast('Error al conectar con la API de ML', 'error');
+    showToast('Error: ' + e.message + '. Verificá el link.', 'error');
   }
 };
+
+
+// ── ORDENES ────────────────────────────────────────────
+async function loadOrdenes() {
+  try {
+    const snap = await getDocs(query(collection(db,'ordenes'), orderBy('creadoEn','desc')));
+    const ordenes = snap.docs.map(d=>({id:d.id,...d.data()}));
+    const tbody = document.getElementById('ordenes-tbody');
+    if (!tbody) return;
+    if (!ordenes.length) {
+      tbody.innerHTML='<tr><td colspan="7" class="empty-state"><div class="empty-icon">📋</div>No hay órdenes todavía.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = ordenes.map(o=>{
+      const fecha = o.creadoEn ? new Date(o.creadoEn).toLocaleDateString('es-AR') : '—';
+      const total = o.total ? `$${Number(o.total).toLocaleString('es-AR')}` : '—';
+      const items = Array.isArray(o.items) ? o.items.slice(0,2).join(', ') + (o.items.length>2?` +${o.items.length-2} más`:'') : '—';
+      return `<tr>
+        <td style="font-size:0.8rem;color:var(--text3)">${fecha}</td>
+        <td class="td-name">${o.empresa||'—'}</td>
+        <td style="color:var(--text2);font-size:0.85rem">${o.nombre||'—'}</td>
+        <td style="color:var(--text2);font-size:0.85rem">${o.tel||'—'}</td>
+        <td style="color:var(--text3);font-size:0.82rem">${o.pago||'—'}</td>
+        <td style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem">${total}</td>
+        <td style="color:var(--text3);font-size:0.78rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${items}</td>
+      </tr>`;
+    }).join('');
+    // dashboard stat
+    const el = document.getElementById('stat-ordenes');
+    if (el) el.textContent = ordenes.length;
+  } catch(e) { console.error(e); }
+}
 
 // ── CLIENTES ──────────────────────────────────────────
 let allClientes = [];
