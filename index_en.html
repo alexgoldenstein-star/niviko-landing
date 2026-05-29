@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NIVIKO — Importadora y Distribuidora Mayorista</title>
-  <meta name="description" content="NIVIKO: importadora y distribuidora mayorista argentina. Sillas, electrodomésticos, tecnología y más. Más de 40 años de experiencia." />
+  <title>NIVIKO — Wholesale Importer & Distributor</title>
+  <meta name="description" content="NIVIKO: Argentine wholesale importer and distributor. Chairs, appliances, technology and more. Over 40 years of experience." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
 
@@ -48,7 +48,7 @@
     window.submitContacto = async function(e) {
       e.preventDefault();
       const btn = document.getElementById("btn-contacto");
-      btn.disabled = true; btn.textContent = "Enviando...";
+      btn.disabled = true; btn.textContent = "Sending...";
       try {
         const form = e.target;
         await addDoc(collection(db, "contactos"), {
@@ -59,10 +59,10 @@
           mensaje: form.mensaje.value,
           fecha: new Date().toISOString()
         });
-        btn.textContent = "¡Mensaje enviado!";
+        btn.textContent = "¡Message enviado!";
         btn.style.background = "#28a745";
         form.reset();
-        setTimeout(() => { btn.disabled = false; btn.textContent = "Enviar mensaje"; btn.style.background = ""; }, 3000);
+        setTimeout(() => { btn.disabled = false; btn.textContent = "Send message"; btn.style.background = ""; }, 3000);
       } catch (err) {
         btn.textContent = "Error al enviar";
         btn.disabled = false;
@@ -420,14 +420,14 @@
   </a>
 
   <ul class="nav-links">
-    <li><a href="productos.html">Productos</a></li>
-    <li><a href="#clientes">Clientes</a></li>
-    <li><a href="#nosotros">Nosotros</a></li>
-    <li><a href="#contacto" class="btn-contacto-nav">Contacto</a></li>
+    <li><a href="productos.html">Products</a></li>
+    <li><a href="#clientes">Clients</a></li>
+    <li><a href="#nosotros">About</a></li>
+    <li><a href="#contacto" class="btn-contacto-nav">Contact</a></li>
   </ul>
 
   <div class="nav-social">
-    <a href="index_en.html" class="lang-btn" title="English version">EN</a>
+    <a href="index.html" class="lang-btn" title="Versión español">ES</a>
     <a href="https://instagram.com/tiendaniviko" class="ig-link" target="_blank" rel="noopener" aria-label="Instagram">
       <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
     </a>
@@ -444,20 +444,20 @@
 <section id="hero">
   <div class="hero-bg"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow">Importadora &amp; Distribuidora Mayorista</p>
+    <p class="hero-eyebrow">Wholesale Importer &amp; Distributor</p>
     <h1 class="hero-title">
-      Soluciones para<br/><span>tu negocio</span>
+      Solutions for<br/><span>your business</span>
     </h1>
-    <p class="hero-subtitle">+150 SKUs en sillas, electrodomésticos, tecnología y mobiliario. Distribución a todo el país.</p>
+    <p class="hero-subtitle">+150 SKUs in chairs, appliances, technology and furniture. Distribution nationwide.</p>
     <div class="hero-btns">
-      <a href="#contacto" class="btn-primary">Quiero ser cliente</a>
-      <a href="productos.html" class="btn-outline">Ver productos</a>
-      <a href="#" class="btn-outline catalogo-link" target="_blank">Descargar catálogo</a>
+      <a href="#contacto" class="btn-primary">Become a client</a>
+      <a href="productos.html" class="btn-outline">View products</a>
+      <a href="#" class="btn-outline catalogo-link" target="_blank">Download catalog</a>
     </div>
     <div class="hero-stats">
-      <div class="stat"><div class="stat-num">+150</div><div class="stat-label">SKUs activos</div></div>
-      <div class="stat"><div class="stat-num">+40</div><div class="stat-label">Años de experiencia</div></div>
-      <div class="stat"><div class="stat-num">3.000 m²</div><div class="stat-label">De depósito propio</div></div>
+      <div class="stat"><div class="stat-num">+150</div><div class="stat-label">Active SKUs</div></div>
+      <div class="stat"><div class="stat-num">+40</div><div class="stat-label">Years of experience</div></div>
+      <div class="stat"><div class="stat-num">3.000 m²</div><div class="stat-label">Own warehouse</div></div>
     </div>
   </div>
 </section>
@@ -473,31 +473,31 @@
 ═══════════════════════════════════════ -->
 <section id="categorias">
   <div class="cats-section-header container">
-    <p class="section-label">Nuestros productos</p>
-    <h2 class="section-title">Categorías</h2>
+    <p class="section-label">Our products</p>
+    <h2 class="section-title">Categories</h2>
   </div>
 
   <!-- Fila 1: 4 categorías -->
   <div class="cats-grid cats-grid-4">
 
     <a class="cat-card" href="productos.html?cat=sillas-hogar">
-      <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=70" alt="Sillas de Hogar" loading="lazy" />
-      <div class="cat-info"><div class="cat-eyebrow">Categoría</div><div class="cat-nombre">Sillas de Hogar</div></div>
+      <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=70" alt="Home Chairs" loading="lazy" />
+      <div class="cat-info"><div class="cat-eyebrow">Category</div><div class="cat-nombre">Home Chairs</div></div>
     </a>
 
     <a class="cat-card" href="productos.html?cat=sillas-oficina">
-      <img src="https://images.unsplash.com/photo-1541558869434-2840d308329a?w=600&q=70" alt="Sillas de Oficina" loading="lazy" />
-      <div class="cat-info"><div class="cat-eyebrow">Categoría</div><div class="cat-nombre">Sillas de Oficina</div></div>
+      <img src="https://images.unsplash.com/photo-1541558869434-2840d308329a?w=600&q=70" alt="Office Chairs" loading="lazy" />
+      <div class="cat-info"><div class="cat-eyebrow">Category</div><div class="cat-nombre">Office Chairs</div></div>
     </a>
 
     <a class="cat-card" href="productos.html?cat=sillas-gamer">
-      <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=600&q=70" alt="Sillas Gamer" loading="lazy" />
-      <div class="cat-info"><div class="cat-eyebrow">Categoría</div><div class="cat-nombre">Sillas Gamer</div></div>
+      <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=600&q=70" alt="Gaming Chairs" loading="lazy" />
+      <div class="cat-info"><div class="cat-eyebrow">Category</div><div class="cat-nombre">Gaming Chairs</div></div>
     </a>
 
     <a class="cat-card" href="productos.html?cat=soporte-tv">
-      <img src="https://images.unsplash.com/photo-1593784991095-a205069470b6?w=600&q=70" alt="Soporte de TV" loading="lazy" />
-      <div class="cat-info"><div class="cat-eyebrow">Categoría</div><div class="cat-nombre">Soporte de TV</div></div>
+      <img src="https://images.unsplash.com/photo-1593784991095-a205069470b6?w=600&q=70" alt="TV Mounts" loading="lazy" />
+      <div class="cat-info"><div class="cat-eyebrow">Category</div><div class="cat-nombre">TV Mounts</div></div>
     </a>
 
   </div>
@@ -506,18 +506,18 @@
   <div class="cats-grid cats-grid-3">
 
     <a class="cat-card" href="productos.html?cat=mesas-plegables">
-      <img src="https://images.unsplash.com/photo-1530018607912-eff2daa1bac4?w=600&q=70" alt="Mesas Plegables" loading="lazy" />
-      <div class="cat-info"><div class="cat-eyebrow">Categoría</div><div class="cat-nombre">Mesas Plegables</div></div>
+      <img src="https://images.unsplash.com/photo-1530018607912-eff2daa1bac4?w=600&q=70" alt="Folding Tables" loading="lazy" />
+      <div class="cat-info"><div class="cat-eyebrow">Category</div><div class="cat-nombre">Folding Tables</div></div>
     </a>
 
     <a class="cat-card" href="productos.html?cat=electrodomesticos">
-      <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=70" alt="Electrodomésticos" loading="lazy" />
-      <div class="cat-info"><div class="cat-eyebrow">Categoría</div><div class="cat-nombre">Electrodomésticos</div></div>
+      <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=70" alt="Appliances" loading="lazy" />
+      <div class="cat-info"><div class="cat-eyebrow">Category</div><div class="cat-nombre">Appliances</div></div>
     </a>
 
     <a class="cat-card" href="productos.html?cat=audio-tecnologia">
-      <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=70" alt="Audio y Tecnología" loading="lazy" />
-      <div class="cat-info"><div class="cat-eyebrow">Categoría</div><div class="cat-nombre">Audio y Tecnología</div></div>
+      <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=70" alt="Audio &amp; Technology" loading="lazy" />
+      <div class="cat-info"><div class="cat-eyebrow">Category</div><div class="cat-nombre">Audio &amp; Technology</div></div>
     </a>
 
   </div>
@@ -530,8 +530,8 @@
 <section id="clientes">
   <div class="container">
     <div class="clientes-header">
-      <p class="section-label">Confían en nosotros</p>
-      <h2 class="section-title">Nuestros clientes</h2>
+      <p class="section-label">They trust us</p>
+      <h2 class="section-title">Our Clients</h2>
     </div>
     <div class="clientes-grid" id="clientes-grid">
       <!-- Los logos se cargan desde Firestore automáticamente -->
@@ -553,27 +553,27 @@
   <div class="container">
     <div class="nosotros-inner">
       <div class="nosotros-text">
-        <p class="section-label">Quiénes somos</p>
-        <h2 class="section-title">+40 años<br/>en el mercado</h2>
-        <p>Somos una importadora y distribuidora mayorista argentina con +40 años de trayectoria. Operamos desde nuestras instalaciones en CABA con depósito propio de 3.000 m², flota de logística propia y un equipo comercial dedicado.</p>
-        <p>Trabajamos con el canal mayorista nacional y con grandes cadenas de retail, ofreciendo condiciones comerciales competitivas, stock garantizado y soporte postventa.</p>
+        <p class="section-label">About us</p>
+        <h2 class="section-title">+40 years<br/>in the market</h2>
+        <p>We are an Argentine wholesale importer and distributor with +40 years of history. We operate from our CABA facilities with a 3,000 m² warehouse, our own logistics fleet and a dedicated commercial team.</p>
+        <p>We work with the national wholesale channel and major retail chains, offering competitive commercial terms, guaranteed stock and after-sales support.</p>
       </div>
       <div class="nosotros-stats">
         <div class="nos-stat">
           <div class="nos-stat-num">+150</div>
-          <div class="nos-stat-label">SKUs activos</div>
+          <div class="nos-stat-label">Active SKUs</div>
         </div>
         <div class="nos-stat">
           <div class="nos-stat-num">+40</div>
-          <div class="nos-stat-label">Años de experiencia</div>
+          <div class="nos-stat-label">Years of experience</div>
         </div>
         <div class="nos-stat">
           <div class="nos-stat-num">3.000 m²</div>
-          <div class="nos-stat-label">Depósito propio</div>
+          <div class="nos-stat-label">Own warehouse</div>
         </div>
         <div class="nos-stat">
           <div class="nos-stat-num">13</div>
-          <div class="nos-stat-label">Representantes comerciales</div>
+          <div class="nos-stat-label">Sales representatives</div>
         </div>
       </div>
     </div>
@@ -586,23 +586,23 @@
 ═══════════════════════════════════════ -->
 <section id="como">
   <div class="container">
-    <p class="section-label">Canales de venta</p>
-    <h2 class="section-title">Cómo trabajamos</h2>
+    <p class="section-label">Sales channels</p>
+    <h2 class="section-title">How we work</h2>
     <div class="canales-grid">
       <div class="canal-card">
         <div class="canal-num">01</div>
-        <div class="canal-title">Canal Mayorista</div>
-        <div class="canal-desc">Atención personalizada a distribuidores, mueblerías y comercios a través de nuestro equipo de representantes con cobertura en todo el país.</div>
+        <div class="canal-title">Wholesale Channel</div>
+        <div class="canal-desc">Personalized service to distributors, furniture stores and retailers through our team of representatives covering the entire country.</div>
       </div>
       <div class="canal-card">
         <div class="canal-num">02</div>
-        <div class="canal-title">Retail &amp; Cadenas</div>
-        <div class="canal-desc">Presencia en las principales cadenas de retail del país. Cumplimiento de estándares de calidad, logística y abastecimiento continuo.</div>
+        <div class="canal-title">Retail &amp; Chains</div>
+        <div class="canal-desc">Presence in the leading retail chains in the country. Compliance with quality, logistics and continuous supply standards.</div>
       </div>
       <div class="canal-card">
         <div class="canal-num">03</div>
-        <div class="canal-title">Ventas Online</div>
-        <div class="canal-desc">Operación en los principales marketplaces del país con posición de liderazgo, garantizando visibilidad de marca y volumen de ventas constante.</div>
+        <div class="canal-title">Online Sales</div>
+        <div class="canal-desc">Operations in the leading marketplaces in the country with a leadership position, ensuring brand visibility and consistent sales volume.</div>
       </div>
     </div>
   </div>
@@ -616,31 +616,31 @@
   <div class="container">
     <div class="contacto-inner">
       <div class="contacto-info">
-        <p class="section-label">Trabajemos juntos</p>
-        <h2 class="section-title">Contacto</h2>
-        <p>¿Querés ser distribuidor o revendedor de NIVIKO? Completá el formulario y un representante se comunicará a la brevedad.</p>
+        <p class="section-label">Let's work together</p>
+        <h2 class="section-title">Contact</h2>
+        <p>Want to become a NIVIKO distributor or reseller? Fill out the form and a representative will contact you shortly.</p>
         <div class="contacto-datos">
-          <div class="contacto-dato"><strong>Dirección:</strong>&nbsp;Batalla del Pari 1053, Paternal, CABA</div>
-          <div class="contacto-dato"><strong>Teléfono:</strong>&nbsp;(011) 4581-7706 / 4584-8922</div>
+          <div class="contacto-dato"><strong>Address:</strong>&nbsp;Batalla del Pari 1053, Paternal, CABA</div>
+          <div class="contacto-dato"><strong>Phone:</strong>&nbsp;(011) 4581-7706 / 4584-8922</div>
           <div class="contacto-dato"><strong>Email:</strong>&nbsp;<span class="email-config">mp@gbs-ar.com</span></div>
           <div class="contacto-dato"><strong>WhatsApp:</strong>&nbsp;+54 9 11 5413-0552</div>
         </div>
       </div>
       <form class="contacto-form" onsubmit="submitContacto(event)">
         <select name="tipo" required>
-          <option value="" disabled selected>Tipo de consulta</option>
-          <option value="cliente">Quiero ser cliente</option>
-          <option value="consulta">Consulta general</option>
-          <option value="garantia">Garantía</option>
-          <option value="otro">Otro</option>
+          <option value="" disabled selected>Type of inquiry</option>
+          <option value="cliente">Become a client</option>
+          <option value="consulta">General inquiry</option>
+          <option value="garantia">Warranty</option>
+          <option value="otro">Other</option>
         </select>
         <div class="form-row">
-          <input type="text" name="nombre" placeholder="Nombre y apellido" required />
-          <input type="tel" name="telefono" placeholder="Teléfono" required />
+          <input type="text" name="nombre" placeholder="Full name" required />
+          <input type="tel" name="telefono" placeholder="Phone" required />
         </div>
         <input type="email" name="email" placeholder="Email" required />
-        <textarea name="mensaje" placeholder="Mensaje" rows="4"></textarea>
-        <button type="submit" class="btn-primary" id="btn-contacto">Enviar mensaje</button>
+        <textarea name="mensaje" placeholder="Message" rows="4"></textarea>
+        <button type="submit" class="btn-primary" id="btn-contacto">Send message</button>
       </form>
     </div>
   </div>
@@ -658,10 +658,10 @@
           <img src="logo.png" alt="NIVIKO" style="height:28px;display:block;margin-bottom:1rem;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
           <span class="logo-text" style="display:none;font-size:1.3rem;margin-bottom:1rem;">NIVIKO<span class="logo-dot"></span></span>
         </a>
-        <p>Importadora y distribuidora mayorista argentina. Más de 40 años conectando productos con negocios en todo el país.</p>
+        <p>Argentine wholesale importer and distributor. +40 years connecting products with businesses nationwide.</p>
       </div>
       <div class="footer-col">
-        <h4>Líneas</h4>
+        <h4>Lines</h4>
         <ul>
           <li><a href="productos.html?linea=Hogar">Hogar</a></li>
           <li><a href="productos.html?linea=Oficina">Oficina</a></li>
@@ -670,16 +670,16 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Empresa</h4>
+        <h4>Company</h4>
         <ul>
-          <li><a href="#nosotros">Nosotros</a></li>
-          <li><a href="#clientes">Clientes</a></li>
-          <li><a href="#como">Canales</a></li>
-          <li><a href="#contacto">Contacto</a></li>
+          <li><a href="#nosotros">About</a></li>
+          <li><a href="#clientes">Clients</a></li>
+          <li><a href="#como">Channels</a></li>
+          <li><a href="#contacto">Contact</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Contacto</h4>
+        <h4>Contact</h4>
         <ul>
           <li><a href="#">Batalla del Pari 1053, CABA</a></li>
           <li><a href="tel:01145817706">(011) 4581-7706</a></li>
@@ -689,7 +689,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2025 NIVIKO. Todos los derechos reservados.</span>
+      <span>© 2025 NIVIKO. All rights reserved.</span>
       <div class="footer-social">
         <a href="https://instagram.com/tiendaniviko" class="ig-link" target="_blank" rel="noopener" aria-label="Instagram">
           <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>

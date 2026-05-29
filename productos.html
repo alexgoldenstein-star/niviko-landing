@@ -259,7 +259,9 @@ function renderCats(products, linea, search) {
   
   container.innerHTML = filtered.map(cat => {
     const prods = products.filter(p => {
-      const matchCat = p.categoria === cat.name || p.categoria === cat.id;
+      // Primero match por ID exacto, luego por nombre como fallback
+      const catId = (p.categoria||'').toLowerCase().trim();
+      const matchCat = catId === cat.id || catId === cat.name.toLowerCase() || p.categoria === cat.id || p.categoria === cat.name;
       const matchSearch = !searchLow || (p.nombre||'').toLowerCase().includes(searchLow) || (p.sku||'').toLowerCase().includes(searchLow);
       return matchCat && matchSearch;
     });
@@ -301,7 +303,10 @@ function renderCats(products, linea, search) {
 
   // Open first cat if searching and has results
   if (searchLow) {
-    const first = filtered.find(c => products.some(p => (p.categoria===c.name||p.categoria===c.id) && (p.nombre||'').toLowerCase().includes(searchLow)));
+    const first = filtered.find(c => products.some(p => {
+      const catId = (p.categoria||'').toLowerCase().trim();
+      return (catId===c.id || catId===c.name.toLowerCase()) && (p.nombre||'').toLowerCase().includes(searchLow);
+    }));
     if (first) openCat(first.id);
   }
 }
