@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Política de Privacidad — NIVIKO</title>
+  <meta name="description" content="Política de Privacidad y Términos de Uso del canal de WhatsApp de NIVIKO." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --negro: #0a0a0a;
+      --rojo: #c0392b;
+      --blanco: #ffffff;
+      --gris-texto: rgba(255,255,255,0.65);
+      --gris-borde: #1e1e1e;
+      --font-display: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
+      --font-body: 'Barlow', Arial, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--negro);
+      color: var(--blanco);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      border-bottom: 1px solid var(--gris-borde);
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      position: sticky; top: 0;
+      background: rgba(10,10,10,0.97);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 900; font-size: 1.35rem;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      color: #fff; text-decoration: none;
+      display: flex; align-items: center; gap: 3px;
+    }
+    .logo-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--rojo); flex-shrink: 0; }
+    .header-divider { width: 1px; height: 20px; background: var(--gris-borde); }
+    .header-label {
+      font-size: 0.75rem; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* ─── HERO STRIP ─── */
+    .page-hero {
+      border-bottom: 1px solid var(--gris-borde);
+      padding: 4rem 2rem 3rem;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .page-hero .eyebrow {
+      font-family: var(--font-display); font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.3em; text-transform: uppercase; color: var(--rojo);
+      margin-bottom: 1rem;
+    }
+    .page-hero h1 {
+      font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 900; text-transform: uppercase; line-height: 1;
+      margin-bottom: 1.25rem;
+    }
+    .page-hero .meta {
+      font-size: 0.8rem; color: rgba(255,255,255,0.35);
+      letter-spacing: 0.05em;
+    }
+    .page-hero .meta span { color: rgba(255,255,255,0.55); }
+
+    /* ─── LAYOUT ─── */
+    .doc-layout {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 2rem 6rem;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 0 4rem;
+      align-items: start;
+    }
+
+    /* ─── SIDEBAR NAV ─── */
+    .sidebar {
+      position: sticky; top: 80px;
+    }
+    .sidebar-label {
+      font-family: var(--font-display); font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: rgba(255,255,255,0.25); margin-bottom: 1rem;
+    }
+    .sidebar nav { display: flex; flex-direction: column; gap: 0.1rem; }
+    .sidebar nav a {
+      font-size: 0.82rem; color: rgba(255,255,255,0.4);
+      text-decoration: none; padding: 0.4rem 0;
+      border-left: 2px solid transparent;
+      padding-left: 0.75rem;
+      transition: color 0.2s, border-color 0.2s;
+      line-height: 1.3;
+    }
+    .sidebar nav a:hover { color: #fff; border-left-color: var(--rojo); }
+
+    /* ─── CONTENT ─── */
+    .doc-content { min-width: 0; }
+
+    .section-block {
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--gris-borde);
+    }
+    .section-block:last-child { border-bottom: none; }
+
+    .section-num {
+      font-family: var(--font-display); font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--rojo); margin-bottom: 0.6rem;
+    }
+    .section-block h2 {
+      font-family: var(--font-display); font-size: 1.4rem; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.03em;
+      margin-bottom: 1.25rem; line-height: 1.1;
+    }
+    .section-block p {
+      color: var(--gris-texto);
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+    .section-block p:last-child { margin-bottom: 0; }
+
+    .section-block ul {
+      list-style: none; margin: 1rem 0;
+      display: flex; flex-direction: column; gap: 0.5rem;
+    }
+    .section-block ul li {
+      color: var(--gris-texto); font-size: 0.95rem;
+      padding-left: 1.25rem; position: relative;
+    }
+    .section-block ul li::before {
+      content: ''; position: absolute; left: 0; top: 0.65em;
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--rojo);
+    }
+
+    /* Highlight box */
+    .highlight-box {
+      border: 1px solid var(--gris-borde);
+      border-left: 3px solid var(--rojo);
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      background: rgba(255,255,255,0.02);
+    }
+    .highlight-box p {
+      margin: 0 !important;
+      font-size: 0.9rem !important;
+      color: rgba(255,255,255,0.55) !important;
+    }
+    .highlight-box strong { color: rgba(255,255,255,0.8); }
+
+    /* Contact block */
+    .contact-block {
+      margin-top: 1.5rem;
+      display: flex; flex-direction: column; gap: 0.5rem;
+    }
+    .contact-item {
+      display: flex; align-items: baseline; gap: 0.6rem;
+      font-size: 0.9rem;
+    }
+    .contact-item .label {
+      font-family: var(--font-display); font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); min-width: 80px;
+    }
+    .contact-item .value { color: rgba(255,255,255,0.65); }
+    .contact-item a { color: var(--rojo); text-decoration: none; }
+    .contact-item a:hover { text-decoration: underline; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--gris-borde);
+      padding: 2rem;
+      text-align: center;
+      color: rgba(255,255,255,0.2);
+      font-size: 0.78rem;
+    }
+    footer a { color: rgba(255,255,255,0.35); text-decoration: none; }
+    footer a:hover { color: #fff; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      .doc-layout { grid-template-columns: 1fr; gap: 0; }
+      .sidebar { display: none; }
+      .page-hero { padding: 2.5rem 1.25rem 2rem; }
+      .doc-layout { padding: 2rem 1.25rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">NIVIKO<span class="logo-dot"></span></a>
+  <div class="header-divider"></div>
+  <span class="header-label">Política de Privacidad</span>
+</header>
+
+<div class="page-hero">
+  <p class="eyebrow">Documento legal</p>
+  <h1>Política de Privacidad<br/>y Términos de Uso</h1>
+  <p class="meta">
+    Canal de WhatsApp Business · NIVIKO ·
+    <span>Última actualización: mayo 2025</span>
+  </p>
+</div>
+
+<div class="doc-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <p class="sidebar-label">Contenido</p>
+    <nav>
+      <a href="#introduccion">1. Introducción</a>
+      <a href="#datos">2. Datos que recopilamos</a>
+      <a href="#uso">3. Uso de la información</a>
+      <a href="#compartir">4. Compartir datos</a>
+      <a href="#conservacion">5. Conservación</a>
+      <a href="#derechos">6. Tus derechos</a>
+      <a href="#seguridad">7. Seguridad</a>
+      <a href="#menores">8. Menores de edad</a>
+      <a href="#cambios">9. Cambios</a>
+      <a href="#contacto">10. Contacto</a>
+    </nav>
+  </aside>
+
+  <!-- CONTENIDO -->
+  <main class="doc-content">
+
+    <div class="section-block" id="introduccion">
+      <p class="section-num">01 — Introducción</p>
+      <h2>Quiénes somos</h2>
+      <p>NIVIKO es una importadora y distribuidora mayorista argentina con domicilio en Batalla del Pari 1053, Paternal, Ciudad Autónoma de Buenos Aires, Argentina.</p>
+      <p>Esta Política de Privacidad describe cómo recopilamos, usamos y protegemos la información personal de quienes se comunican con nosotros a través de nuestro canal de WhatsApp Business (<strong>+54 9 11 5413-0552</strong>), así como los términos que rigen el uso de dicho canal.</p>
+      <p>Al iniciar una conversación con nosotros por WhatsApp, aceptás los términos descritos en este documento.</p>
+    </div>
+
+    <div class="section-block" id="datos">
+      <p class="section-num">02 — Datos que recopilamos</p>
+      <h2>Información que recibimos</h2>
+      <p>Cuando te comunicás con NIVIKO por WhatsApp, podemos recibir y almacenar los siguientes datos:</p>
+      <ul>
+        <li>Nombre y apellido (tal como figuran en tu perfil de WhatsApp o los que nos proporcionés)</li>
+        <li>Número de teléfono celular</li>
+        <li>Nombre de empresa o negocio (si lo indicás)</li>
+        <li>Contenido de los mensajes: consultas, pedidos, reclamos o cualquier comunicación enviada</li>
+        <li>Archivos adjuntos que nos enviés (imágenes, documentos)</li>
+        <li>Fecha y hora de las comunicaciones</li>
+      </ul>
+      <div class="highlight-box">
+        <p><strong>No recopilamos</strong> contraseñas, datos bancarios ni información financiera a través de este canal. Nunca te vamos a solicitar datos de tarjetas de crédito o claves por WhatsApp.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="uso">
+      <p class="section-num">03 — Uso de la información</p>
+      <h2>Para qué usamos tus datos</h2>
+      <p>Utilizamos la información que nos proporcionás exclusivamente para:</p>
+      <ul>
+        <li>Responder consultas sobre productos, precios y condiciones comerciales</li>
+        <li>Procesar y gestionar órdenes de compra mayoristas</li>
+        <li>Enviar cotizaciones, listas de precios y catálogos solicitados</li>
+        <li>Coordinar entregas y logística</li>
+        <li>Brindar soporte postventa y atención de garantías</li>
+        <li>Comunicar novedades de productos o promociones, cuando hayas dado tu consentimiento</li>
+      </ul>
+      <p>No utilizamos tus datos para elaborar perfiles comerciales, análisis de comportamiento ni publicidad dirigida de terceros.</p>
+    </div>
+
+    <div class="section-block" id="compartir">
+      <p class="section-num">04 — Compartir datos</p>
+      <h2>Con quién compartimos información</h2>
+      <p>NIVIKO no vende, alquila ni cede datos personales a terceros con fines comerciales.</p>
+      <p>Podemos compartir información en los siguientes casos limitados:</p>
+      <ul>
+        <li><strong>Equipo interno:</strong> representantes comerciales y personal de NIVIKO que necesiten la información para gestionar tu consulta o pedido.</li>
+        <li><strong>Logística:</strong> empresas de transporte o distribución, únicamente los datos necesarios para coordinar entregas (nombre, dirección, teléfono de contacto).</li>
+        <li><strong>Obligaciones legales:</strong> cuando sea requerido por autoridades competentes conforme a la legislación argentina vigente.</li>
+      </ul>
+      <p>Todas las comunicaciones a través de WhatsApp están sujetas adicionalmente a los <a href="https://www.whatsapp.com/legal/privacy-policy" target="_blank" rel="noopener" style="color:var(--rojo)">Términos y Política de Privacidad de WhatsApp Inc.</a></p>
+    </div>
+
+    <div class="section-block" id="conservacion">
+      <p class="section-num">05 — Conservación</p>
+      <h2>Por cuánto tiempo guardamos tus datos</h2>
+      <p>Conservamos los registros de comunicación durante el tiempo necesario para cumplir con la relación comercial y las obligaciones legales aplicables.</p>
+      <ul>
+        <li>Conversaciones activas: mientras la relación comercial esté vigente.</li>
+        <li>Historial de pedidos: hasta 5 años, conforme a la normativa fiscal y comercial argentina.</li>
+        <li>Consultas sin concretar: hasta 2 años desde el último contacto.</li>
+      </ul>
+      <p>Podés solicitar la eliminación de tus datos en cualquier momento (ver sección 6).</p>
+    </div>
+
+    <div class="section-block" id="derechos">
+      <p class="section-num">06 — Tus derechos</p>
+      <h2>Derechos sobre tu información</h2>
+      <p>De acuerdo con la <strong>Ley 25.326 de Protección de Datos Personales</strong> de la República Argentina, tenés derecho a:</p>
+      <ul>
+        <li><strong>Acceso:</strong> solicitar qué información personal tenemos sobre vos.</li>
+        <li><strong>Rectificación:</strong> corregir datos inexactos o desactualizados.</li>
+        <li><strong>Eliminación:</strong> pedir que borremos tu información, salvo que exista una obligación legal de conservarla.</li>
+        <li><strong>Oposición:</strong> oponerte al uso de tus datos para comunicaciones comerciales.</li>
+      </ul>
+      <div class="highlight-box">
+        <p>Para ejercer cualquiera de estos derechos, escribinos al correo <strong>mp@niviko.com.ar</strong> o al mismo WhatsApp con el asunto "Datos Personales". Respondemos en un plazo máximo de <strong>10 días hábiles</strong>.</p>
+      </div>
+    </div>
+
+    <div class="section-block" id="seguridad">
+      <p class="section-num">07 — Seguridad</p>
+      <h2>Cómo protegemos tu información</h2>
+      <p>Adoptamos medidas técnicas y organizativas razonables para proteger tus datos contra acceso no autorizado, pérdida o divulgación indebida.</p>
+      <p>WhatsApp Business utiliza cifrado de extremo a extremo en los mensajes. Sin embargo, una vez que la información es recibida e ingresada a nuestros sistemas internos, la protegemos con controles de acceso y confidencialidad propios.</p>
+      <p>Ningún sistema de transmisión de datos por internet es 100% seguro. En caso de que tomemos conocimiento de una brecha de seguridad que afecte tus datos, te notificaremos a la brevedad.</p>
+    </div>
+
+    <div class="section-block" id="menores">
+      <p class="section-num">08 — Menores de edad</p>
+      <h2>Restricción de uso</h2>
+      <p>El canal de WhatsApp de NIVIKO está destinado exclusivamente a personas mayores de 18 años y/o a representantes de empresas o negocios. No recopilamos intencionalmente información de menores de edad.</p>
+      <p>Si tomamos conocimiento de que hemos recibido datos de un menor sin consentimiento parental, procederemos a eliminarlos de inmediato.</p>
+    </div>
+
+    <div class="section-block" id="cambios">
+      <p class="section-num">09 — Cambios</p>
+      <h2>Actualizaciones de esta política</h2>
+      <p>Podemos actualizar esta Política de Privacidad en cualquier momento. Cuando lo hagamos, modificaremos la fecha de "última actualización" que figura al inicio del documento.</p>
+      <p>Si los cambios son sustanciales, lo comunicaremos a través de nuestros canales habituales. El uso continuado del canal de WhatsApp después de la publicación de cambios implica la aceptación de la nueva política.</p>
+    </div>
+
+    <div class="section-block" id="contacto">
+      <p class="section-num">10 — Contacto</p>
+      <h2>Comunicarse con nosotros</h2>
+      <p>Para consultas, reclamos o ejercer tus derechos sobre tus datos personales, podés contactarnos por cualquiera de los siguientes medios:</p>
+      <div class="contact-block">
+        <div class="contact-item">
+          <span class="label">Empresa</span>
+          <span class="value">NIVIKO — Importadora y Distribuidora Mayorista</span>
+        </div>
+        <div class="contact-item">
+          <span class="label">Dirección</span>
+          <span class="value">Batalla del Pari 1053, Paternal, CABA, Argentina</span>
+        </div>
+        <div class="contact-item">
+          <span class="label">Email</span>
+          <a href="mailto:mp@niviko.com.ar" class="value">mp@niviko.com.ar</a>
+        </div>
+        <div class="contact-item">
+          <span class="label">WhatsApp</span>
+          <a href="https://wa.me/5491154130552" class="value">+54 9 11 5413-0552</a>
+        </div>
+        <div class="contact-item">
+          <span class="label">Teléfono</span>
+          <span class="value">(011) 4581-7706 / 4584-8922</span>
+        </div>
+        <div class="contact-item">
+          <span class="label">Web</span>
+          <a href="https://www.niviko.com.ar" class="value">www.niviko.com.ar</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <p>© 2025 NIVIKO. Todos los derechos reservados. &nbsp;·&nbsp; <a href="index.html">Volver al sitio</a></p>
+</footer>
+
+</body>
+</html>

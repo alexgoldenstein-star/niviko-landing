@@ -198,58 +198,7 @@
       font-weight: 900; text-transform: uppercase; line-height: 1;
     }
 
-    /* ─── BANNER LÍNEAS — 4 COLUMNAS ─── */
-    #lineas { padding: 0; }
-    .lineas-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      width: 100%;
-    }
-    .linea-card {
-      position: relative;
-      height: 280px;
-      overflow: hidden;
-      text-decoration: none;
-      display: block;
-      cursor: pointer;
-    }
-    .linea-card img {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      filter: brightness(0.45) grayscale(0.3);
-      transition: filter 0.4s, transform 0.5s;
-    }
-    .linea-card:hover img { filter: brightness(0.6) grayscale(0); transform: scale(1.04); }
-    .linea-card::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
-      z-index: 1;
-    }
-    /* Red accent line top */
-    .linea-card::after {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0;
-      height: 3px; background: var(--rojo);
-      z-index: 2; transform: scaleX(0);
-      transition: transform 0.3s;
-    }
-    .linea-card:hover::after { transform: scaleX(1); }
-    .linea-info {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 1.5rem;
-      z-index: 2;
-    }
-    .linea-eyebrow {
-      font-family: var(--font-display); font-size: 0.65rem; font-weight: 600;
-      letter-spacing: 0.25em; text-transform: uppercase;
-      color: var(--rojo); margin-bottom: 0.3rem;
-    }
-    .linea-nombre {
-      font-family: var(--font-display); font-size: 1.8rem; font-weight: 900;
-      text-transform: uppercase; color: #fff; line-height: 1;
-    }
+    /* lineas section removed */
 
     /* ─── CATEGORÍAS ─── */
     #categorias { background: #0d0d0d; padding: 5rem 0 0; }
@@ -437,7 +386,10 @@
      NAV
 ═══════════════════════════════════════ -->
 <nav>
-  <a href="#hero" class="nav-logo logo-text">NIVIKO<span class="logo-dot"></span></a>
+  <a href="#hero" class="nav-logo">
+    <img src="logo.png" alt="NIVIKO" style="height:32px;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+    <span class="logo-text" style="display:none;">NIVIKO<span class="logo-dot"></span></span>
+  </a>
 
   <ul class="nav-links">
     <li><a href="productos.html">Productos</a></li>
@@ -467,61 +419,24 @@
     <h1 class="hero-title">
       Soluciones para<br/><span>tu negocio</span>
     </h1>
-    <p class="hero-subtitle">Más de 150 SKUs en sillas, electrodomésticos, tecnología y mobiliario. Distribución a todo el país.</p>
+    <p class="hero-subtitle">+150 SKUs en sillas, electrodomésticos, tecnología y mobiliario. Distribución a todo el país.</p>
     <div class="hero-btns">
       <a href="#contacto" class="btn-primary">Quiero ser cliente</a>
       <a href="productos.html" class="btn-outline">Ver productos</a>
       <a href="#" class="btn-outline catalogo-link" target="_blank">Descargar catálogo</a>
     </div>
     <div class="hero-stats">
-      <div class="stat"><div class="stat-num">150+</div><div class="stat-label">SKUs activos</div></div>
-      <div class="stat"><div class="stat-num">40+</div><div class="stat-label">Años de experiencia</div></div>
+      <div class="stat"><div class="stat-num">+150</div><div class="stat-label">SKUs activos</div></div>
+      <div class="stat"><div class="stat-num">+40</div><div class="stat-label">Años de experiencia</div></div>
       <div class="stat"><div class="stat-num">3.000 m²</div><div class="stat-label">De depósito propio</div></div>
     </div>
   </div>
 </section>
 
 
-<!-- ═══════════════════════════════════════
-     LÍNEAS — 4 COLUMNAS (fix definitivo)
-═══════════════════════════════════════ -->
-<section id="lineas">
-  <div class="lineas-grid">
 
-    <a class="linea-card" href="productos.html?linea=Hogar">
-      <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=70" alt="Línea Hogar" loading="lazy" />
-      <div class="linea-info">
-        <div class="linea-eyebrow">Línea</div>
-        <div class="linea-nombre">Hogar</div>
-      </div>
-    </a>
 
-    <a class="linea-card" href="productos.html?linea=Oficina">
-      <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=70" alt="Línea Oficina" loading="lazy" />
-      <div class="linea-info">
-        <div class="linea-eyebrow">Línea</div>
-        <div class="linea-nombre">Oficina</div>
-      </div>
-    </a>
-
-    <a class="linea-card" href="productos.html?linea=Electro">
-      <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=70" alt="Línea Electro" loading="lazy" />
-      <div class="linea-info">
-        <div class="linea-eyebrow">Línea</div>
-        <div class="linea-nombre">Electro</div>
-      </div>
-    </a>
-
-    <a class="linea-card" href="productos.html?linea=Tecnologia">
-      <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=70" alt="Línea Tecnología" loading="lazy" />
-      <div class="linea-info">
-        <div class="linea-eyebrow">Línea</div>
-        <div class="linea-nombre">Tecnología</div>
-      </div>
-    </a>
-
-  </div>
-</section>
+<!-- categorias va directo después del hero -->
 
 
 <!-- ═══════════════════════════════════════
@@ -662,17 +577,17 @@
     <div class="nosotros-inner">
       <div class="nosotros-text">
         <p class="section-label">Quiénes somos</p>
-        <h2 class="section-title">Más de 40 años<br/>en el mercado</h2>
-        <p>Somos una importadora y distribuidora mayorista argentina con más de cuatro décadas de trayectoria. Operamos desde nuestras instalaciones en CABA con depósito propio de 3.000 m², flota de logística propia y un equipo comercial dedicado.</p>
+        <h2 class="section-title">+40 años<br/>en el mercado</h2>
+        <p>Somos una importadora y distribuidora mayorista argentina con +40 años de trayectoria. Operamos desde nuestras instalaciones en CABA con depósito propio de 3.000 m², flota de logística propia y un equipo comercial dedicado.</p>
         <p>Trabajamos con el canal mayorista nacional y con grandes cadenas de retail, ofreciendo condiciones comerciales competitivas, stock garantizado y soporte postventa.</p>
       </div>
       <div class="nosotros-stats">
         <div class="nos-stat">
-          <div class="nos-stat-num">150+</div>
+          <div class="nos-stat-num">+150</div>
           <div class="nos-stat-label">SKUs activos</div>
         </div>
         <div class="nos-stat">
-          <div class="nos-stat-num">40+</div>
+          <div class="nos-stat-num">+40</div>
           <div class="nos-stat-label">Años de experiencia</div>
         </div>
         <div class="nos-stat">
@@ -762,7 +677,10 @@
   <div class="container">
     <div class="footer-inner">
       <div class="footer-brand">
-        <span class="logo-text" style="font-size:1.3rem;">NIVIKO<span class="logo-dot"></span></span>
+        <a href="#hero">
+          <img src="logo.png" alt="NIVIKO" style="height:28px;display:block;margin-bottom:1rem;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+          <span class="logo-text" style="display:none;font-size:1.3rem;margin-bottom:1rem;">NIVIKO<span class="logo-dot"></span></span>
+        </a>
         <p>Importadora y distribuidora mayorista argentina. Más de 40 años conectando productos con negocios en todo el país.</p>
       </div>
       <div class="footer-col">
