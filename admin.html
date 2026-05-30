@@ -476,6 +476,27 @@ tbody td{padding:12px 16px;color:var(--text2)}
               <label>Mensaje de bienvenida WhatsApp</label>
               <input type="text" id="cfg-wamsg" placeholder="Hola, quiero saber más sobre los productos mayoristas de NIVIKO.">
             </div>
+            <div class="form-field full">
+              <label>URL del Catálogo PDF</label>
+              <div style="display:flex;gap:0.5rem;align-items:center;">
+                <input type="url" id="cfg-catalogo" placeholder="https://drive.google.com/file/d/..." style="flex:1;">
+                <a href="https://drive.google.com/drive/my-drive" target="_blank" rel="noopener"
+                   style="display:inline-flex;align-items:center;gap:0.4rem;background:#1a1a1a;border:1px solid #333;color:rgba(255,255,255,0.7);padding:0.6rem 1rem;font-size:0.78rem;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;white-space:nowrap;cursor:pointer;"
+                   title="Subir a Google Drive y copiar el link">
+                  📁 Abrir Drive
+                </a>
+              </div>
+              <p style="font-size:0.72rem;color:var(--text3);margin-top:4px;">
+                Subí el PDF a Google Drive → clic derecho → "Obtener enlace" → "Cualquier persona con el enlace" → pegá la URL acá.
+              </p>
+            </div>
+            <div class="form-field full">
+              <label>Instagram</label>
+              <input type="url" id="cfg-instagram" placeholder="https://instagram.com/tiendaniviko">
+            </div>
+            <div class="form-field full">
+              <label>Facebook</label>
+              <input type="url" id="cfg-facebook" placeholder="https://facebook.com/nivikoargentina">
           </div>
           <div style="margin-top:1rem">
             <button class="btn-primary" onclick="saveConfig()">Guardar cambios</button>
@@ -806,7 +827,7 @@ function renderCategorias() {
       <td class="td-name">${c.nombre||''}</td>
       <td>${c.icono||'—'}</td>
       <td style="color:var(--text2);font-size:0.82rem">${c.descripcion||'—'}</td>
-      <td>${allProductos.filter(p=>p.categoria===c.nombre).length}</td>
+      <td>${allProductos.filter(p=>p.categoria===c.id||p.categoria===c.nombre).length}</td>
       <td>
         <button class="action-btn" onclick="editCategoria('${c.id}')">Editar</button>
         <button class="action-btn danger" onclick="deleteCategoria('${c.id}')">Eliminar</button>
@@ -815,7 +836,7 @@ function renderCategorias() {
 }
 
 function populateCatSelects() {
-  const opts = allCategorias.map(c => `<option value="${c.nombre}">${c.icono||''} ${c.nombre}</option>`).join('');
+  const opts = allCategorias.map(c => `<option value="${c.id||c.nombre}">${c.icono||''} ${c.nombre}</option>`).join('');
   document.getElementById('prod-categoria').innerHTML = '<option value="">— Seleccionar —</option>' + opts;
   document.getElementById('filter-categoria').innerHTML = '<option value="">Todas las categorías</option>' + opts;
 }
