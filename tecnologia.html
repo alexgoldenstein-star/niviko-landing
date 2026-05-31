@@ -360,6 +360,33 @@
     @media(max-width:480px) {
       .brand-grid { grid-template-columns: 1fr; }
     }
+  
+    .brand-logo-wrap {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-bottom: 0.75rem;
+    }
+    .brand-logo-wrap img {
+      width: auto;
+      height: 36px;
+      max-width: 100%;
+      object-fit: contain;
+      opacity: 0.75;
+      transition: opacity 0.3s;
+      filter: brightness(0) invert(1);
+    }
+    .brand-card:hover .brand-logo-wrap img { opacity: 1; }
+    .brand-fallback {
+      display: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      align-items: center;
+    }
   </style>
 </head>
 <body>
@@ -421,217 +448,250 @@
   </div>
 
   <div class="brand-grid" id="brandGrid">
-    <div class="brand-card">
+        <div class="brand-card" data-sector="consumer electronics">
           <div class="brand-card-accent" style="background:#1428A0"></div>
-          <div class="brand-initial" style="color:#1428A0">S</div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/samsung/ffffff" alt="Samsung" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Samsung</span>
+          </div>
           <div class="brand-name">Samsung</div>
           <div class="brand-sector">Consumer Electronics</div>
         </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#555"></div>
-          <div class="brand-initial" style="color:#555">A</div>
+        <div class="brand-card" data-sector="consumer electronics">
+          <div class="brand-card-accent" style="background:#555555"></div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/apple/ffffff" alt="Apple" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Apple</span>
+          </div>
           <div class="brand-name">Apple</div>
           <div class="brand-sector">Consumer Electronics</div>
         </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#000"></div>
-          <div class="brand-initial" style="color:#000">S</div>
+        <div class="brand-card" data-sector="audio & video">
+          <div class="brand-card-accent" style="background:#000000"></div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/sony/ffffff" alt="Sony" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Sony</span>
+          </div>
           <div class="brand-name">Sony</div>
           <div class="brand-sector">Audio & Video</div>
         </div>
-        <div class="brand-card">
+        <div class="brand-card" data-sector="consumer electronics">
           <div class="brand-card-accent" style="background:#A50034"></div>
-          <div class="brand-initial" style="color:#A50034">L</div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/lg/ffffff" alt="LG" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">LG</span>
+          </div>
           <div class="brand-name">LG</div>
           <div class="brand-sector">Consumer Electronics</div>
         </div>
-        <div class="brand-card">
+        <div class="brand-card" data-sector="audio">
           <div class="brand-card-accent" style="background:#FF6B00"></div>
-          <div class="brand-initial" style="color:#FF6B00">J</div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/jbl/ffffff" alt="JBL" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">JBL</span>
+          </div>
           <div class="brand-name">JBL</div>
           <div class="brand-sector">Audio</div>
         </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#000"></div>
-          <div class="brand-initial" style="color:#000">B</div>
+        <div class="brand-card" data-sector="premium audio">
+          <div class="brand-card-accent" style="background:#000000"></div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/bose/ffffff" alt="Bose" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Bose</span>
+          </div>
           <div class="brand-name">Bose</div>
-          <div class="brand-sector">Audio</div>
+          <div class="brand-sector">Premium Audio</div>
         </div>
-        <div class="brand-card">
+        <div class="brand-card" data-sector="smartphones">
           <div class="brand-card-accent" style="background:#CF0A2C"></div>
-          <div class="brand-initial" style="color:#CF0A2C">H</div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/huawei/ffffff" alt="Huawei" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Huawei</span>
+          </div>
           <div class="brand-name">Huawei</div>
-          <div class="brand-sector">Smartphones & Tech</div>
+          <div class="brand-sector">Smartphones</div>
         </div>
-        <div class="brand-card">
+        <div class="brand-card" data-sector="smartphones">
           <div class="brand-card-accent" style="background:#FF6900"></div>
-          <div class="brand-initial" style="color:#FF6900">X</div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/xiaomi/ffffff" alt="Xiaomi" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Xiaomi</span>
+          </div>
           <div class="brand-name">Xiaomi</div>
-          <div class="brand-sector">Smartphones & Tech</div>
+          <div class="brand-sector">Smartphones</div>
         </div>
-        <div class="brand-card">
+        <div class="brand-card" data-sector="smartphones">
           <div class="brand-card-accent" style="background:#005A9C"></div>
-          <div class="brand-initial" style="color:#005A9C">M</div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/motorola/ffffff" alt="Motorola" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Motorola</span>
+          </div>
           <div class="brand-name">Motorola</div>
           <div class="brand-sector">Smartphones</div>
         </div>
-        <div class="brand-card">
+        <div class="brand-card" data-sector="computing">
           <div class="brand-card-accent" style="background:#E2231A"></div>
-          <div class="brand-initial" style="color:#E2231A">L</div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/lenovo/ffffff" alt="Lenovo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Lenovo</span>
+          </div>
           <div class="brand-name">Lenovo</div>
           <div class="brand-sector">Computing</div>
         </div>
-        <div class="brand-card">
+        <div class="brand-card" data-sector="computing">
           <div class="brand-card-accent" style="background:#007DB8"></div>
-          <div class="brand-initial" style="color:#007DB8">D</div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/dell/ffffff" alt="Dell" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Dell</span>
+          </div>
           <div class="brand-name">Dell</div>
           <div class="brand-sector">Computing</div>
         </div>
-        <div class="brand-card">
+        <div class="brand-card" data-sector="computing">
           <div class="brand-card-accent" style="background:#0096D6"></div>
-          <div class="brand-initial" style="color:#0096D6">H</div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/hp/ffffff" alt="HP" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">HP</span>
+          </div>
           <div class="brand-name">HP</div>
           <div class="brand-sector">Computing</div>
         </div>
-        <div class="brand-card">
+        <div class="brand-card" data-sector="computing">
           <div class="brand-card-accent" style="background:#00AEEF"></div>
-          <div class="brand-initial" style="color:#00AEEF">A</div>
-          <div class="brand-name">Asus</div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/asus/ffffff" alt="ASUS" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">ASUS</span>
+          </div>
+          <div class="brand-name">ASUS</div>
           <div class="brand-sector">Computing</div>
         </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#00A4EF"></div>
-          <div class="brand-initial" style="color:#00A4EF">M</div>
-          <div class="brand-name">Microsoft</div>
-          <div class="brand-sector">Computing & Software</div>
-        </div>
-        <div class="brand-card">
+        <div class="brand-card" data-sector="tech & devices">
           <div class="brand-card-accent" style="background:#4285F4"></div>
-          <div class="brand-initial" style="color:#4285F4">G</div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/google/ffffff" alt="Google" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Google</span>
+          </div>
           <div class="brand-name">Google</div>
           <div class="brand-sector">Tech & Devices</div>
         </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#FF9900"></div>
-          <div class="brand-initial" style="color:#FF9900">A</div>
-          <div class="brand-name">Amazon</div>
-          <div class="brand-sector">Smart Home</div>
-        </div>
-        <div class="brand-card">
+        <div class="brand-card" data-sector="audio">
           <div class="brand-card-accent" style="background:#E3000F"></div>
-          <div class="brand-initial" style="color:#E3000F">B</div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/beats/ffffff" alt="Beats" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Beats</span>
+          </div>
           <div class="brand-name">Beats</div>
           <div class="brand-sector">Audio</div>
         </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#000"></div>
-          <div class="brand-initial" style="color:#000">H</div>
-          <div class="brand-name">Harman Kardon</div>
-          <div class="brand-sector">Premium Audio</div>
-        </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#CC0000"></div>
-          <div class="brand-initial" style="color:#CC0000">P</div>
-          <div class="brand-name">Pioneer</div>
-          <div class="brand-sector">Audio & Video</div>
-        </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#00B8E3"></div>
-          <div class="brand-initial" style="color:#00B8E3">L</div>
-          <div class="brand-name">Logitech</div>
-          <div class="brand-sector">Peripherals</div>
-        </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#DA1F3D"></div>
-          <div class="brand-initial" style="color:#DA1F3D">K</div>
-          <div class="brand-name">Kingston</div>
-          <div class="brand-sector">Storage & Memory</div>
-        </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#E2231A"></div>
-          <div class="brand-initial" style="color:#E2231A">S</div>
-          <div class="brand-name">SanDisk</div>
-          <div class="brand-sector">Storage</div>
-        </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#003087"></div>
-          <div class="brand-initial" style="color:#003087">E</div>
-          <div class="brand-name">Epson</div>
-          <div class="brand-sector">Printing & Imaging</div>
-        </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#CC0000"></div>
-          <div class="brand-initial" style="color:#CC0000">C</div>
-          <div class="brand-name">Canon</div>
-          <div class="brand-sector">Imaging</div>
-        </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#FFD700"></div>
-          <div class="brand-initial" style="color:#FFD700">N</div>
+        <div class="brand-card" data-sector="imaging">
+          <div class="brand-card-accent" style="background:#F7D219"></div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/nikon/ffffff" alt="Nikon" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Nikon</span>
+          </div>
           <div class="brand-name">Nikon</div>
           <div class="brand-sector">Imaging</div>
         </div>
-        <div class="brand-card">
+        <div class="brand-card" data-sector="imaging">
+          <div class="brand-card-accent" style="background:#003087"></div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/epson/ffffff" alt="Epson" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Epson</span>
+          </div>
+          <div class="brand-name">Epson</div>
+          <div class="brand-sector">Imaging</div>
+        </div>
+        <div class="brand-card" data-sector="drones & cameras">
           <div class="brand-card-accent" style="background:#1A1A1A"></div>
-          <div class="brand-initial" style="color:#1A1A1A">D</div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/dji/ffffff" alt="DJI" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">DJI</span>
+          </div>
           <div class="brand-name">DJI</div>
           <div class="brand-sector">Drones & Cameras</div>
         </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#00AEEF"></div>
-          <div class="brand-initial" style="color:#00AEEF">G</div>
-          <div class="brand-name">GoPro</div>
-          <div class="brand-sector">Action Cameras</div>
-        </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#E4000F"></div>
-          <div class="brand-initial" style="color:#E4000F">N</div>
-          <div class="brand-name">Nintendo</div>
-          <div class="brand-sector">Gaming</div>
-        </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#107C10"></div>
-          <div class="brand-initial" style="color:#107C10">X</div>
-          <div class="brand-name">Xbox</div>
-          <div class="brand-sector">Gaming</div>
-        </div>
-        <div class="brand-card">
+        <div class="brand-card" data-sector="electronics">
           <div class="brand-card-accent" style="background:#E2000A"></div>
-          <div class="brand-initial" style="color:#E2000A">T</div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/toshiba/ffffff" alt="Toshiba" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Toshiba</span>
+          </div>
           <div class="brand-name">Toshiba</div>
           <div class="brand-sector">Electronics</div>
         </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#003087"></div>
-          <div class="brand-initial" style="color:#003087">A</div>
-          <div class="brand-name">Alcatel</div>
-          <div class="brand-sector">Smartphones</div>
-        </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#00C4A7"></div>
-          <div class="brand-initial" style="color:#00C4A7">Q</div>
-          <div class="brand-name">QCY</div>
-          <div class="brand-sector">Audio</div>
-        </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#FF6B00"></div>
-          <div class="brand-initial" style="color:#FF6B00">M</div>
-          <div class="brand-name">Monster</div>
-          <div class="brand-sector">Audio</div>
-        </div>
-        <div class="brand-card">
+        <div class="brand-card" data-sector="wearables">
           <div class="brand-card-accent" style="background:#00B0B9"></div>
-          <div class="brand-initial" style="color:#00B0B9">F</div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/fitbit/ffffff" alt="Fitbit" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Fitbit</span>
+          </div>
           <div class="brand-name">Fitbit</div>
           <div class="brand-sector">Wearables</div>
         </div>
-        <div class="brand-card">
-          <div class="brand-card-accent" style="background:#E2000A"></div>
-          <div class="brand-initial" style="color:#E2000A">N</div>
-          <div class="brand-name">Numark</div>
-          <div class="brand-sector">DJ & Audio</div>
+        <div class="brand-card" data-sector="consumer electronics">
+          <div class="brand-card-accent" style="background:#004B8D"></div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/panasonic/ffffff" alt="Panasonic" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Panasonic</span>
+          </div>
+          <div class="brand-name">Panasonic</div>
+          <div class="brand-sector">Consumer Electronics</div>
         </div>
-  </div>
+        <div class="brand-card" data-sector="electronics">
+          <div class="brand-card-accent" style="background:#000000"></div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/sharp/ffffff" alt="Sharp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Sharp</span>
+          </div>
+          <div class="brand-name">Sharp</div>
+          <div class="brand-sector">Electronics</div>
+        </div>
+        <div class="brand-card" data-sector="computing">
+          <div class="brand-card-accent" style="background:#0071C5"></div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/intel/ffffff" alt="Intel" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Intel</span>
+          </div>
+          <div class="brand-name">Intel</div>
+          <div class="brand-sector">Computing</div>
+        </div>
+        <div class="brand-card" data-sector="computing">
+          <div class="brand-card-accent" style="background:#ED1C24"></div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/amd/ffffff" alt="AMD" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">AMD</span>
+          </div>
+          <div class="brand-name">AMD</div>
+          <div class="brand-sector">Computing</div>
+        </div>
+        <div class="brand-card" data-sector="computing & gaming">
+          <div class="brand-card-accent" style="background:#76B900"></div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/nvidia/ffffff" alt="NVIDIA" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">NVIDIA</span>
+          </div>
+          <div class="brand-name">NVIDIA</div>
+          <div class="brand-sector">Computing & Gaming</div>
+        </div>
+        <div class="brand-card" data-sector="gaming">
+          <div class="brand-card-accent" style="background:#44D62C"></div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/razer/ffffff" alt="Razer" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Razer</span>
+          </div>
+          <div class="brand-name">Razer</div>
+          <div class="brand-sector">Gaming</div>
+        </div>
+        <div class="brand-card" data-sector="gaming & computing">
+          <div class="brand-card-accent" style="background:#F1B300"></div>
+          <div class="brand-logo-wrap">
+            <img src="https://cdn.simpleicons.org/corsair/ffffff" alt="Corsair" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy" />
+            <span class="brand-fallback">Corsair</span>
+          </div>
+          <div class="brand-name">Corsair</div>
+          <div class="brand-sector">Gaming & Computing</div>
+        </div>
+      </div></div>
 </section>
 
 <!-- HOW WE WORK -->
