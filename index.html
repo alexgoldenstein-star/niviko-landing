@@ -85,7 +85,7 @@
         const items = docs.slice(0, count);
         grid.innerHTML = items.map(c => `
           <div class="cliente-cell">
-            <img src="${c.logo}" alt="${c.nombre}" title="${c.nombre}" loading="lazy" />
+            ${c.logo ? `<img src="${c.logo}" alt="${c.nombre}" title="${c.nombre}" loading="lazy" />` : `<span class="cliente-name">${c.nombre||''}</span>`}
           </div>`).join('');
       } catch(e) { console.warn('Clientes load error:', e); }
     }
@@ -468,6 +468,18 @@
     @media (max-width: 480px) {
       .tech-logos-grid { grid-template-columns: repeat(3, 1fr); }
     }
+  
+  .cliente-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.28);
+    transition: color 0.3s;
+    white-space: nowrap;
+  }
+  .cliente-cell:hover .cliente-name { color: rgba(255,255,255,0.75); }
   </style>
 </head>
 <body>
@@ -595,13 +607,21 @@
       <h2 class="section-title">Nuestros clientes</h2>
     </div>
     <div class="clientes-grid" id="clientes-grid">
-      <!-- Los logos se cargan desde Firestore automáticamente -->
-      <!-- ══ PEGAR AQUÍ LOS 42 <div class="cliente-cell"><img ...></div> ══
-           con los base64 del HTML original.
-           Estructura: exactamente 42 entradas (6 filas × 7 columnas).
-           Si el original tiene 44, se descartan 2 para número redondo.
-           Ejemplo de celda:
-      -->
+      <!-- Logos se cargan desde Firestore. Mientras, se muestran placeholders -->
+      <div class="cliente-cell"><span class="cliente-name">Easy</span></div>
+      <div class="cliente-cell"><span class="cliente-name">Sodimac</span></div>
+      <div class="cliente-cell"><span class="cliente-name">Cencosud</span></div>
+      <div class="cliente-cell"><span class="cliente-name">Jumbo</span></div>
+      <div class="cliente-cell"><span class="cliente-name">Walmart</span></div>
+      <div class="cliente-cell"><span class="cliente-name">Carrefour</span></div>
+      <div class="cliente-cell"><span class="cliente-name">Disco</span></div>
+      <div class="cliente-cell"><span class="cliente-name">Vea</span></div>
+      <div class="cliente-cell"><span class="cliente-name">Maxiconsumo</span></div>
+      <div class="cliente-cell"><span class="cliente-name">Vital</span></div>
+      <div class="cliente-cell"><span class="cliente-name">Makro</span></div>
+      <div class="cliente-cell"><span class="cliente-name">Frávega</span></div>
+      <div class="cliente-cell"><span class="cliente-name">Musimundo</span></div>
+      <div class="cliente-cell"><span class="cliente-name">Garbarino</span></div>
 </div><!-- /clientes-grid -->
   </div>
 </section>

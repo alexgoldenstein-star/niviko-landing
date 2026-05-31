@@ -44,13 +44,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 /* CATEGORY SECTION */
 .cat-section{margin:0 5% 2px;border:1px solid var(--border);overflow:hidden}
 .cat-header{
-  display:flex;align-items:center;gap:1rem;padding:1.1rem 1.5rem;
-  background:var(--bg2);cursor:pointer;transition:background 0.2s;
-  border-bottom:1px solid transparent;
+  display:flex;align-items:flex-end;gap:0;padding:0;
+  background:var(--bg2);cursor:pointer;transition:border-color 0.2s;
+  border:1px solid var(--border);position:relative;overflow:hidden;height:140px;
+  border-bottom:1px solid var(--border);
 }
-.cat-header:hover{background:var(--bg3)}
-.cat-header.open{border-bottom-color:var(--border)}
-.cat-header-img{width:52px;height:40px;object-fit:cover;border-radius:3px;flex-shrink:0;background:var(--bg4)}
+.cat-header:hover{border-color:var(--rojo)}
+.cat-header.open{border-color:var(--rojo);border-bottom-color:transparent}
+.cat-header-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.35;transition:opacity 0.4s,transform 0.4s;filter:grayscale(30%)}
+.cat-header:hover .cat-header-img,.cat-header.open .cat-header-img{opacity:0.5;transform:scale(1.04)}
+.cat-header-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.88) 0%,rgba(0,0,0,0.4) 55%,transparent 100%)}
 .cat-header-name{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;flex:1}
 .cat-header-count{font-size:0.78rem;color:var(--text3);font-family:'Barlow Condensed',sans-serif;letter-spacing:0.06em}
 .cat-chevron{color:var(--text3);transition:transform 0.25s;font-size:0.9rem}
@@ -138,6 +141,63 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .empty-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:40vh;color:var(--text3);text-align:center;gap:1rem}
 .empty-page .icon{font-size:3rem}
 .empty-page p{font-size:0.95rem}
+
+.cat-header-info {
+  position: relative;
+  z-index: 2;
+  padding: 1rem 1.25rem;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.cat-header-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #fff;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.8);
+  flex: 1;
+}
+.cat-header-count {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  background: rgba(0,0,0,0.35);
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.cat-chevron {
+  position: relative;
+  z-index: 2;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.7rem;
+  padding: 0 1rem 1rem 0;
+  align-self: flex-end;
+  transition: transform 0.25s;
+}
+.cat-header.open .cat-chevron { transform: rotate(180deg); color: var(--rojo); }
+.cat-linea-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 2;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--rojo);
+  padding: 0.15rem 0.5rem;
+}
 </style>
 </head>
 <body>
@@ -290,9 +350,13 @@ function renderCats(products, linea, search) {
 
     return `<div class="cat-section" id="cat-${cat.id}">
       <div class="cat-header ${isOpen?'open':''}" onclick="toggleCat('${cat.id}')">
-        <img class="cat-header-img" src="${cat.img}" alt="${cat.name}" onerror="this.style.display='none'">
-        <span class="cat-header-name">${cat.name}</span>
-        <span class="cat-header-count">${prods.length} producto${prods.length!==1?'s':''}</span>
+        <img class="cat-header-img" src="${cat.img}" alt="${cat.name}" onerror="this.style.opacity='0'">
+        <div class="cat-header-overlay"></div>
+        <span class="cat-linea-badge">${cat.linea}</span>
+        <div class="cat-header-info">
+          <span class="cat-header-name">${cat.icon} ${cat.name}</span>
+          <span class="cat-header-count">${prods.length} producto${prods.length!==1?'s':''}</span>
+        </div>
         <span class="cat-chevron">▼</span>
       </div>
       <div class="cat-body ${isOpen?'open':''}" id="body-${cat.id}">
