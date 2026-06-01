@@ -191,8 +191,32 @@ tbody td{padding:12px 16px;color:var(--text2)}
 .form-field textarea{resize:vertical;min-height:80px}
 .form-field select option{background:#1a1a1a}
 .form-footer{display:flex;justify-content:flex-end;gap:0.75rem;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border)}
-.img-preview{width:100%;height:120px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text3);overflow:hidden;margin-top:6px}
-.img-preview img{width:100%;height:100%;object-fit:cover}
+.img-preview{
+  width:100%;height:120px;background:var(--bg3);
+  border:1px solid var(--border);border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.8rem;color:var(--text3);overflow:hidden;margin-top:6px;
+  position:relative;transition:border-color 0.2s;
+}
+.img-preview.has-image{border-color:#333}
+.img-preview.loading{border-color:var(--rojo)}
+.img-preview img{width:100%;height:100%;object-fit:contain;padding:6px}
+.img-preview-placeholder{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  color:var(--text3);
+}
+.img-preview-placeholder svg{opacity:0.35;width:28px;height:28px}
+.img-preview-placeholder span{font-size:0.72rem;letter-spacing:0.05em}
+.img-preview-loading{
+  display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--rojo);
+}
+.spinner{
+  width:22px;height:22px;border:2px solid rgba(192,57,43,0.2);
+  border-top-color:var(--rojo);border-radius:50%;
+  animation:spin 0.7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.img-preview-loading span{font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase}
 
 /* BANNERS */
 .banners-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
@@ -562,7 +586,10 @@ tbody td{padding:12px 16px;color:var(--text2)}
             <input type="file" accept="image/*" style="display:none" onchange="uploadToImgBB(this,'prod-imagen','img-preview-box')">
           </label>
         </div>
-        <div class="img-preview" id="img-preview-box"><span>Vista previa</span></div>
+        <div class="img-preview" id="img-preview-box"><div class="img-preview-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span>Sin imagen</span>
+          </div></div>
         <p style="font-size:0.72rem;color:var(--text3);margin-top:4px">Subí la imagen directo o pegá una URL (ImgBB, Google Drive, etc.)</p>
       </div>
       <div class="form-field">
@@ -624,7 +651,10 @@ tbody td{padding:12px 16px;color:var(--text2)}
             <input type="file" accept="image/*" style="display:none" onchange="uploadToImgBB(this,'banner-img','banner-preview-box')">
           </label>
         </div>
-        <div class="img-preview" id="banner-preview-box"><span>Vista previa</span></div>
+        <div class="img-preview" id="banner-preview-box"><div class="img-preview-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span>Sin imagen</span>
+          </div></div>
       </div>
       <div class="form-field">
         <label>Texto del botón</label>
@@ -692,7 +722,10 @@ tbody td{padding:12px 16px;color:var(--text2)}
           <input type="file" accept="image/*" style="display:none" onchange="uploadToImgBB(this,'cliente-logo','cliente-logo-preview')">
         </label>
       </div>
-      <div class="img-preview" id="cliente-logo-preview" style="height:80px"><span>Vista previa</span></div>
+      <div class="img-preview" id="cliente-logo-preview" style="height:80px"><div class="img-preview-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span>Sin imagen</span>
+          </div></div>
     </div>
     <div class="form-field" style="margin-bottom:1rem">
       <label>Estado</label>
@@ -937,7 +970,10 @@ window.openProductModal = () => {
   document.getElementById('prod-categoria').value = '';
   document.getElementById('prod-estado').value = 'true';
   document.getElementById('prod-destacado').value = 'false';
-  document.getElementById('img-preview-box').innerHTML = '<span>Vista previa</span>';
+  document.getElementById('img-preview-box').innerHTML = '<div class="img-preview-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span>Sin imagen</span>
+          </div>';
   document.getElementById('modal-producto').classList.add('open');
 };
 
@@ -1000,9 +1036,40 @@ window.deleteProducto = async (id) => {
   } catch(e) { showToast('Error','error'); }
 };
 
+const PLACEHOLDER_HTML = `<div class="img-preview-placeholder">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+    <span>Sin imagen</span>
+  </div>`;
+
+function setPreviewLoading(previewId) {
+  const el = document.getElementById(previewId);
+  if (!el) return;
+  el.classList.remove('has-image');
+  el.classList.add('loading');
+  el.innerHTML = `<div class="img-preview-loading"><div class="spinner"></div><span>Subiendo...</span></div>`;
+}
+
+function setPreviewImage(previewId, url) {
+  const el = document.getElementById(previewId);
+  if (!el) return;
+  el.classList.remove('loading');
+  el.classList.add('has-image');
+  el.innerHTML = `<img src="${url}" alt="Preview" />`;
+}
+
+function setPreviewEmpty(previewId) {
+  const el = document.getElementById(previewId);
+  if (!el) return;
+  el.classList.remove('loading','has-image');
+  el.innerHTML = PLACEHOLDER_HTML;
+}
+
 window.previewImg = (url) => {
   const box = document.getElementById('img-preview-box');
-  box.innerHTML = url ? `<img src="${url}" onerror="this.parentElement.innerHTML='<span>URL inválida</span>'">` : '<span>Vista previa</span>';
+  box.innerHTML = url ? `<img src="${url}" onerror="this.parentElement.innerHTML='<span>URL inválida</span>'">` : '<div class="img-preview-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span>Sin imagen</span>
+          </div>';
 };
 
 // ── BANNERS ────────────────────────────────────────────
@@ -1043,7 +1110,10 @@ window.openBannerModal = () => {
   document.getElementById('modal-banner-title').textContent = 'Nuevo banner';
   ['banner-titulo','banner-sub','banner-img','banner-btn-text'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('banner-estado').value='true';
-  document.getElementById('banner-preview-box').innerHTML='<span>Vista previa</span>';
+  document.getElementById('banner-preview-box').innerHTML='<div class="img-preview-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span>Sin imagen</span>
+          </div>';
   document.getElementById('modal-banner').classList.add('open');
 };
 
@@ -1096,12 +1166,22 @@ window.deleteBanner = async (id) => {
 
 window.previewBannerImg = (url) => {
   const box = document.getElementById('banner-preview-box');
-  box.innerHTML = url ? `<img src="${url}" onerror="this.parentElement.innerHTML='<span>URL inválida</span>'">` : '<span>Vista previa</span>';
+  box.innerHTML = url ? `<img src="${url}" onerror="this.parentElement.innerHTML='<span>URL inválida</span>'">` : '<div class="img-preview-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span>Sin imagen</span>
+          </div>';
 };
 
 window.previewClienteLogo = (url) => {
-  const box = document.getElementById('cliente-logo-preview');
-  if (box) box.innerHTML = url ? `<img src="${url}" onerror="this.parentElement.innerHTML='<span>URL inválida</span>'">` : '<span>Vista previa</span>';
+  if (url) {
+    setPreviewImage('cliente-logo-preview', url);
+  } else {
+    setPreviewEmpty('cliente-logo-preview');
+  }
+};" onerror="this.parentElement.innerHTML='<span>URL inválida</span>'">` : '<div class="img-preview-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span>Sin imagen</span>
+          </div>';
 };
 
 // ── FIREBASE STORAGE UPLOAD ─────────────────────────────
@@ -1109,7 +1189,6 @@ window.uploadToImgBB = async (input, targetInputId, previewId) => {
   const file = input.files[0];
   if (!file) return;
 
-  // Validar tipo y tamaño (max 5MB)
   if (!file.type.startsWith('image/')) {
     showToast('Solo se permiten imágenes', 'error'); return;
   }
@@ -1117,7 +1196,7 @@ window.uploadToImgBB = async (input, targetInputId, previewId) => {
     showToast('La imagen no puede superar 5MB', 'error'); return;
   }
 
-  showToast('Subiendo imagen...', 'success');
+  setPreviewLoading(previewId);
   try {
     const ext = file.name.split('.').pop();
     const filename = `imagenes/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
@@ -1125,11 +1204,11 @@ window.uploadToImgBB = async (input, targetInputId, previewId) => {
     await uploadBytes(storageRef, file);
     const url = await getDownloadURL(storageRef);
     document.getElementById(targetInputId).value = url;
-    const preview = document.getElementById(previewId);
-    if (preview) preview.innerHTML = `<img src="${url}" style="max-width:100%;max-height:120px;object-fit:contain;">`;
+    setPreviewImage(previewId, url);
     showToast('✓ Imagen subida correctamente');
   } catch(e) {
     console.error('Storage error:', e);
+    setPreviewEmpty(previewId);
     showToast('Error al subir imagen: ' + (e.message || e), 'error');
   }
 };
@@ -1243,7 +1322,10 @@ window.openClienteModal = () => {
   document.getElementById('cliente-nombre').value = '';
   document.getElementById('cliente-logo').value = '';
   document.getElementById('cliente-estado').value = 'true';
-  document.getElementById('cliente-logo-preview').innerHTML = '<span>Vista previa</span>';
+  document.getElementById('cliente-logo-preview').innerHTML = '<div class="img-preview-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span>Sin imagen</span>
+          </div>';
   document.getElementById('modal-cliente').classList.add('open');
 };
 
