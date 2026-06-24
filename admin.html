@@ -281,6 +281,79 @@ tbody td{padding:12px 16px;color:var(--text2)}
 .doc-form-field input:focus,.doc-form-field select:focus{border-color:var(--rojo)}
 .portal-select{background:var(--negro);border:1px solid var(--border);color:var(--text1);font-family:'Barlow',sans-serif;font-size:.82rem;padding:.3rem .6rem;outline:none;cursor:pointer}
 .portal-select:focus{border-color:var(--rojo)}
+
+/* Galería de imágenes del producto */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-top: 6px;
+}
+.gallery-slot {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.gallery-slot.has-image { border-color: #333; }
+.gallery-slot.loading { border-color: var(--rojo); }
+.gallery-slot img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.gallery-slot .slot-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  opacity: 0; transition: opacity 0.2s;
+}
+.gallery-slot:hover .slot-overlay { opacity: 1; }
+.gallery-slot .slot-num {
+  position: absolute; top: 4px; left: 5px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.6rem; font-weight: 700;
+  color: rgba(255,255,255,0.4);
+}
+.gallery-slot .slot-main-badge {
+  position: absolute; top: 4px; right: 4px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.55rem; font-weight: 700; letter-spacing: 0.08em;
+  background: var(--rojo); color: #fff; padding: 1px 4px;
+  text-transform: uppercase;
+}
+.slot-btn {
+  width: 24px; height: 24px;
+  background: rgba(255,255,255,0.15);
+  border: none; color: #fff; cursor: pointer;
+  font-size: 0.75rem;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 2px; transition: background 0.15s;
+}
+.slot-btn:hover { background: rgba(255,255,255,0.3); }
+.slot-btn.del:hover { background: var(--rojo); }
+.slot-empty-label {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 4px; cursor: pointer; width: 100%; height: 100%;
+  justify-content: center;
+}
+.slot-empty-label svg { opacity: 0.2; width: 22px; height: 22px; }
+.slot-empty-label span {
+  font-size: 0.62rem; color: var(--text3);
+  letter-spacing: 0.05em;
+}
+.slot-spinner {
+  width: 18px; height: 18px;
+  border: 2px solid rgba(192,57,43,0.2);
+  border-top-color: var(--rojo);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
 </style>
 </head>
 <body>
@@ -696,20 +769,10 @@ tbody td{padding:12px 16px;color:var(--text2)}
         <label>Descripción corta</label>
         <textarea id="prod-descripcion" placeholder="Características principales del producto..."></textarea>
       </div>
-      <div class="form-field">
-        <label>Imagen del producto</label>
-        <div style="display:flex;gap:6px;margin-bottom:6px">
-          <input type="url" id="prod-imagen" placeholder="https://i.ibb.co/..." oninput="previewImg(this.value)" style="flex:1">
-          <label style="display:inline-flex;align-items:center;gap:5px;padding:0 12px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-size:0.78rem;color:var(--text2);white-space:nowrap;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
-            📎 Subir
-            <input type="file" accept="image/*" style="display:none" onchange="uploadToImgBB(this,'prod-imagen','img-preview-box')">
-          </label>
-        </div>
-        <div class="img-preview" id="img-preview-box"><div class="img-preview-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            <span>Sin imagen</span>
-          </div></div>
-        <p style="font-size:0.72rem;color:var(--text3);margin-top:4px">Subí la imagen directo o pegá una URL (ImgBB, Google Drive, etc.)</p>
+      <div class="form-field full">
+        <label>Fotos del producto <span style="color:var(--text3);font-weight:400;font-size:.65rem;letter-spacing:.05em">(hasta 5 — la primera es la principal)</span></label>
+        <div class="gallery-grid" id="gallery-grid"></div>
+        <p style="font-size:0.7rem;color:var(--text3);margin-top:6px">Hacé clic en cada slot para subir una foto o pegar una URL.</p>
       </div>
       <div class="form-field">
         <label>Colores disponibles</label>
@@ -1085,11 +1148,11 @@ window.filterProductos = () => {
 window.openProductModal = () => {
   editingProductoId = null;
   document.getElementById('modal-prod-title').textContent = 'Nuevo producto';
-  ['prod-nombre','prod-sku','prod-descripcion','prod-imagen','prod-colores','prod-bulto','prod-precio'].forEach(id=>document.getElementById(id).value='');
+  ['prod-nombre','prod-sku','prod-descripcion','prod-colores','prod-bulto','prod-precio'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('prod-categoria').value = '';
   document.getElementById('prod-estado').value = 'true';
   document.getElementById('prod-destacado').value = 'false';
-  setPreviewEmpty('img-preview-box');
+  resetGallery();
   document.getElementById('modal-producto').classList.add('open');
 };
 
@@ -1102,13 +1165,13 @@ window.editProducto = (id) => {
   document.getElementById('prod-sku').value = p.sku||'';
   document.getElementById('prod-categoria').value = p.categoria||'';
   document.getElementById('prod-descripcion').value = p.descripcion||'';
-  document.getElementById('prod-imagen').value = p.imagen||'';
+  // imágenes → manejadas por galería
   document.getElementById('prod-colores').value = p.colores||'';
   document.getElementById('prod-bulto').value = p.bulto||'';
   document.getElementById('prod-precio').value = p.precio||'';
   document.getElementById('prod-estado').value = String(p.activo!==false);
   document.getElementById('prod-destacado').value = String(!!p.destacado);
-  previewImg(p.imagen||'');
+  setGalleryData(p);
   document.getElementById('modal-producto').classList.add('open');
 };
 
@@ -1122,7 +1185,7 @@ window.saveProducto = async () => {
     sku: document.getElementById('prod-sku').value.trim(),
     categoria,
     descripcion: document.getElementById('prod-descripcion').value.trim(),
-    imagen: document.getElementById('prod-imagen').value.trim(),
+    ...getGalleryData(),
     colores: document.getElementById('prod-colores').value.trim(),
     bulto: parseInt(document.getElementById('prod-bulto').value)||null,
     precio: parseFloat(document.getElementById('prod-precio').value)||null,
@@ -1347,7 +1410,7 @@ window.importFromML = async () => {
     // Best image: use https version
     const pic = data.pictures?.[0]?.url || data.thumbnail || '';
     const imgUrl = pic.replace('http://','https://');
-    if (imgUrl) { document.getElementById('prod-imagen').value = imgUrl; previewImg(imgUrl); }
+    if (imgUrl) { galleryImages[0] = imgUrl; renderGallery(); }
     // Attributes as description
     const attrs = (data.attributes||[])
       .filter(a=>a.value_name && a.value_name!=='N/A')
@@ -1814,6 +1877,106 @@ window.eliminarDocumento = async (id) => {
     showToast('Documento eliminado');
   } catch(e) { showToast('Error: '+e.message,'error'); }
 };
+
+
+// ═══════════════════════════════════════════
+// GALERÍA DE IMÁGENES — hasta 5 fotos
+// ═══════════════════════════════════════════
+let galleryImages = ['','','','','']; // 5 slots, string vacío = vacío
+
+function renderGallery() {
+  const grid = document.getElementById('gallery-grid');
+  if (!grid) return;
+  grid.innerHTML = galleryImages.map((url, i) => {
+    if (url) {
+      return `<div class="gallery-slot has-image" id="gslot-${i}">
+        <img src="${url}" alt="Foto ${i+1}" onerror="clearGallerySlot(${i})">
+        ${i === 0 ? '<span class="slot-main-badge">Principal</span>' : ''}
+        <span class="slot-num">${i+1}</span>
+        <div class="slot-overlay">
+          ${i > 0 ? `<button class="slot-btn" onclick="moveGallerySlot(${i},-1)" title="Mover izquierda">←</button>` : ''}
+          <button class="slot-btn del" onclick="clearGallerySlot(${i})" title="Eliminar">✕</button>
+          ${i < galleryImages.filter(u=>u).length-1 ? `<button class="slot-btn" onclick="moveGallerySlot(${i},1)" title="Mover derecha">→</button>` : ''}
+        </div>
+      </div>`;
+    } else {
+      return `<div class="gallery-slot" id="gslot-${i}">
+        <span class="slot-num">${i+1}</span>
+        <label class="slot-empty-label" title="Agregar foto">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span>Agregar</span>
+          <input type="file" accept="image/*" style="display:none" onchange="uploadGallerySlot(this,${i})">
+        </label>
+      </div>`;
+    }
+  }).join('');
+}
+
+window.uploadGallerySlot = async (input, slotIdx) => {
+  const file = input.files[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { showToast('Solo imágenes','error'); return; }
+  if (file.size > 5*1024*1024) { showToast('Máximo 5MB por imagen','error'); return; }
+
+  // Mostrar spinner
+  const slot = document.getElementById('gslot-' + slotIdx);
+  if (slot) {
+    slot.classList.add('loading');
+    slot.innerHTML = `<div class="slot-spinner"></div>`;
+  }
+
+  try {
+    const ext = file.name.split('.').pop();
+    const filename = `imagenes/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+    const storageRef = ref(storage, filename);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    galleryImages[slotIdx] = url;
+    renderGallery();
+    showToast('✓ Foto subida');
+  } catch(e) {
+    showToast('Error al subir: ' + (e.message||e), 'error');
+    renderGallery(); // restaurar slot vacío
+  }
+};
+
+window.clearGallerySlot = (idx) => {
+  galleryImages[idx] = '';
+  // Compactar: mover imágenes hacia adelante
+  galleryImages = [...galleryImages.filter(u=>u), ...Array(5).fill('')].slice(0,5);
+  renderGallery();
+};
+
+window.moveGallerySlot = (idx, dir) => {
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx > 4) return;
+  [galleryImages[idx], galleryImages[newIdx]] = [galleryImages[newIdx], galleryImages[idx]];
+  renderGallery();
+};
+
+function getGalleryData() {
+  const filled = galleryImages.filter(u => u);
+  return {
+    imagen: filled[0] || '',        // primera foto = imagen principal (compatibilidad)
+    imagenes: filled               // array completo
+  };
+}
+
+function setGalleryData(producto) {
+  if (producto.imagenes && producto.imagenes.length) {
+    galleryImages = [...producto.imagenes, ...Array(5).fill('')].slice(0,5);
+  } else if (producto.imagen) {
+    galleryImages = [producto.imagen, '', '', '', ''];
+  } else {
+    galleryImages = ['','','','',''];
+  }
+  renderGallery();
+}
+
+function resetGallery() {
+  galleryImages = ['','','','',''];
+  renderGallery();
+}
 
 </script>
 </body>
