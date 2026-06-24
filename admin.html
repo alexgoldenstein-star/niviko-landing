@@ -254,6 +254,33 @@ tbody td{padding:12px 16px;color:var(--text2)}
 .settings-row:last-child{border-bottom:none}
 .settings-row-label{font-size:0.9rem}
 .settings-row-sub{font-size:0.78rem;color:var(--text2);margin-top:2px}
+
+/* ── PORTAL ADMIN STYLES ── */
+.portal-table{width:100%;border-collapse:collapse}
+.portal-table th{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);padding:.6rem 1rem;text-align:left;border-bottom:1px solid var(--border)}
+.portal-table td{padding:.75rem 1rem;border-bottom:1px solid var(--border);font-size:.84rem;color:var(--text2);vertical-align:middle}
+.portal-table tr:hover td{background:var(--bg3)}
+.estado-badge{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:.63rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .55rem}
+.badge-pendiente{background:rgba(255,180,0,.12);color:#ffc800}
+.badge-activo{background:rgba(0,180,100,.12);color:#4ade80}
+.badge-rechazado{background:rgba(192,57,43,.15);color:#e88}
+.badge-recibido{background:rgba(255,200,0,.1);color:#ffc800}
+.badge-preparacion{background:rgba(0,120,255,.1);color:#4a9eff}
+.badge-despachado{background:rgba(150,0,255,.1);color:#a855f7}
+.badge-entregado{background:rgba(0,180,100,.1);color:#4ade80}
+.btn-xs{background:none;border:1px solid var(--border);color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .65rem;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.btn-xs:hover{border-color:var(--text2);color:var(--text1)}
+.btn-xs.verde{border-color:#4ade80;color:#4ade80}
+.btn-xs.rojo{border-color:var(--rojo);color:var(--rojo)}
+.btn-xs.amarillo{border-color:#ffc800;color:#ffc800}
+.doc-upload-form{background:var(--bg3);border:1px solid var(--border);padding:1.5rem;margin-bottom:1.5rem}
+.doc-upload-form .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.doc-form-field{margin-bottom:1rem}
+.doc-form-field label{display:block;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-bottom:.35rem}
+.doc-form-field input,.doc-form-field select{width:100%;background:var(--negro);border:1px solid var(--border);color:var(--text1);font-family:'Barlow',sans-serif;font-size:.88rem;padding:.6rem .85rem;outline:none;transition:border-color .2s}
+.doc-form-field input:focus,.doc-form-field select:focus{border-color:var(--rojo)}
+.portal-select{background:var(--negro);border:1px solid var(--border);color:var(--text1);font-family:'Barlow',sans-serif;font-size:.82rem;padding:.3rem .6rem;outline:none;cursor:pointer}
+.portal-select:focus{border-color:var(--rojo)}
 </style>
 </head>
 <body>
@@ -306,6 +333,16 @@ tbody td{padding:12px 16px;color:var(--text2)}
         </div>
         <div class="nav-item" onclick="showPage('settings')">
           <span class="nav-icon">⚙️</span> Configuración
+        </div>
+        <div style="border-top:1px solid #1a1a1a;margin:.75rem 0;"></div>
+        <div class="nav-item" onclick="showPage('portal-usuarios')">
+          <span class="nav-icon">👥</span> Usuarios portal
+        </div>
+        <div class="nav-item" onclick="showPage('portal-pedidos')">
+          <span class="nav-icon">📦</span> Pedidos portal
+        </div>
+        <div class="nav-item" onclick="showPage('portal-documentos')">
+          <span class="nav-icon">📄</span> Documentos
         </div>
       </nav>
       <div class="sidebar-footer">
@@ -537,6 +574,88 @@ tbody td{padding:12px 16px;color:var(--text2)}
             <span class="badge badge-active">Admin</span>
           </div>
         </div>
+      </div>
+
+
+      <!-- ═══ PORTAL: USUARIOS ═══ -->
+      <div class="page" id="page-portal-usuarios">
+        <div class="page-header">
+          <div class="page-tag">Portal</div>
+          <div class="page-title">Usuarios del portal</div>
+        </div>
+        <div class="toolbar" style="margin-bottom:1.5rem">
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+            <button class="btn-primary" onclick="filterUsuarios('pendiente',this)" id="filter-pendiente">⏳ Pendientes (<span id="count-pendiente">0</span>)</button>
+            <button class="btn-secondary" onclick="filterUsuarios('activo',this)" id="filter-activo">Activos (<span id="count-activo">0</span>)</button>
+            <button class="btn-secondary" onclick="filterUsuarios('rechazado',this)" id="filter-rechazado">Rechazados (<span id="count-rechazado">0</span>)</button>
+            <button class="btn-secondary" onclick="filterUsuarios('todos',this)">Todos</button>
+          </div>
+        </div>
+        <table class="portal-table">
+          <thead><tr>
+            <th>Nombre</th><th>Empresa</th><th>Email</th><th>Teléfono</th>
+            <th>CUIT</th><th>Rol</th><th>Estado</th><th>Vendedor asignado</th><th>Acciones</th>
+          </tr></thead>
+          <tbody id="tbody-usuarios"></tbody>
+        </table>
+      </div>
+
+      <!-- ═══ PORTAL: PEDIDOS ═══ -->
+      <div class="page" id="page-portal-pedidos">
+        <div class="page-header">
+          <div class="page-tag">Portal</div>
+          <div class="page-title">Pedidos del portal</div>
+        </div>
+        <div class="toolbar" style="margin-bottom:1.5rem">
+          <select class="portal-select" id="filter-estado-pedido" onchange="renderPedidosPortal()">
+            <option value="">Todos los estados</option>
+            <option value="recibido">Recibido</option>
+            <option value="preparacion">En preparación</option>
+            <option value="despachado">Despachado</option>
+            <option value="entregado">Entregado</option>
+          </select>
+        </div>
+        <table class="portal-table">
+          <thead><tr>
+            <th>#</th><th>Cliente</th><th>Empresa</th><th>Vendedor</th>
+            <th>Fecha</th><th>Productos</th><th>Estado</th><th>Remito</th><th>Acciones</th>
+          </tr></thead>
+          <tbody id="tbody-pedidos-portal"></tbody>
+        </table>
+      </div>
+
+      <!-- ═══ PORTAL: DOCUMENTOS ═══ -->
+      <div class="page" id="page-portal-documentos">
+        <div class="page-header">
+          <div class="page-tag">Portal</div>
+          <div class="page-title">Documentos</div>
+        </div>
+        <div class="doc-upload-form">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:1rem;color:var(--text2)">Subir nuevo documento</div>
+          <div class="doc-upload-form .form-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;align-items:end">
+            <div class="doc-form-field">
+              <label>Nombre</label>
+              <input type="text" id="doc-nombre" placeholder="Catálogo Invierno 2025">
+            </div>
+            <div class="doc-form-field">
+              <label>Tipo</label>
+              <select id="doc-tipo">
+                <option value="catalogo">Catálogo</option>
+                <option value="lista">Lista de precios</option>
+                <option value="promo">Promoción</option>
+              </select>
+            </div>
+            <div class="doc-form-field">
+              <label>URL del documento (Drive / PDF)</label>
+              <input type="url" id="doc-url" placeholder="https://drive.google.com/...">
+            </div>
+          </div>
+          <button class="btn-primary" onclick="subirDocumento()" style="margin-top:.5rem">+ Publicar documento</button>
+        </div>
+        <table class="portal-table">
+          <thead><tr><th>Nombre</th><th>Tipo</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead>
+          <tbody id="tbody-documentos"></tbody>
+        </table>
       </div>
 
     </main>
@@ -1452,6 +1571,250 @@ function updateDashboard() {
     </tr>`).join('')
     : '<tr><td colspan="3" class="empty-state">Sin productos aún</td></tr>';
 }
+
+// ═══════════════════════════════════════════════════════
+// PORTAL — Usuarios, Pedidos, Documentos
+// ═══════════════════════════════════════════════════════
+
+let allUsuariosPortal = [];
+let allPedidosPortal  = [];
+let allDocumentosPortal = [];
+let allVendedores = [];
+let currentFilterUsuarios = 'pendiente';
+
+// ── Carga inicial cuando se entra a una página portal ──
+const origShowPage = window.showPage;
+window.showPage = (name) => {
+  origShowPage(name);
+  if (name === 'portal-usuarios' && !allUsuariosPortal.length) loadUsuariosPortal();
+  if (name === 'portal-pedidos'  && !allPedidosPortal.length)  loadPedidosPortal();
+  if (name === 'portal-documentos') loadDocumentosPortal();
+};
+
+// ── USUARIOS ──────────────────────────────────────────
+async function loadUsuariosPortal() {
+  const snap = await getDocs(collection(db, 'usuarios'));
+  allUsuariosPortal = snap.docs.map(d => ({id:d.id,...d.data()}));
+  allVendedores = allUsuariosPortal.filter(u => u.rol === 'vendedor' && u.estado === 'activo');
+  // Contadores
+  ['pendiente','activo','rechazado'].forEach(e => {
+    const el = document.getElementById('count-'+e);
+    if (el) el.textContent = allUsuariosPortal.filter(u=>u.estado===e).length;
+  });
+  renderUsuarios();
+}
+
+window.filterUsuarios = (estado, btn) => {
+  currentFilterUsuarios = estado;
+  document.querySelectorAll('[id^="filter-"]').forEach(b => b.classList.replace('btn-primary','btn-secondary'));
+  btn.classList.replace('btn-secondary','btn-primary');
+  renderUsuarios();
+};
+
+function renderUsuarios() {
+  const filtered = currentFilterUsuarios === 'todos'
+    ? allUsuariosPortal
+    : allUsuariosPortal.filter(u => u.estado === currentFilterUsuarios);
+  const tbody = document.getElementById('tbody-usuarios');
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="9" class="empty-state">Sin usuarios en este estado</td></tr>';
+    return;
+  }
+  tbody.innerHTML = filtered.map(u => {
+    const estadoBadge = {
+      pendiente:`<span class="estado-badge badge-pendiente">Pendiente</span>`,
+      activo:`<span class="estado-badge badge-activo">Activo</span>`,
+      rechazado:`<span class="estado-badge badge-rechazado">Rechazado</span>`
+    }[u.estado] || u.estado;
+
+    const rolSelect = `<select class="portal-select" onchange="cambiarRol('${u.id}',this.value)">
+      <option value="cliente" ${u.rol==='cliente'?'selected':''}>Cliente</option>
+      <option value="vendedor" ${u.rol==='vendedor'?'selected':''}>Vendedor</option>
+    </select>`;
+
+    const vendedorSelect = u.rol === 'cliente'
+      ? `<select class="portal-select" onchange="asignarVendedor('${u.id}',this.value)">
+          <option value="">Sin asignar</option>
+          ${allVendedores.map(v=>`<option value="${v.id}" ${u.vendedorId===v.id?'selected':''}>${v.nombre} ${v.apellido}</option>`).join('')}
+        </select>`
+      : '—';
+
+    const acciones = u.estado === 'pendiente'
+      ? `<button class="btn-xs verde" onclick="cambiarEstadoUsuario('${u.id}','activo')">✓ Aprobar</button>
+         <button class="btn-xs rojo" onclick="cambiarEstadoUsuario('${u.id}','rechazado')" style="margin-left:4px">✗ Rechazar</button>`
+      : u.estado === 'activo'
+      ? `<button class="btn-xs rojo" onclick="cambiarEstadoUsuario('${u.id}','rechazado')">Desactivar</button>`
+      : `<button class="btn-xs verde" onclick="cambiarEstadoUsuario('${u.id}','activo')">Reactivar</button>`;
+
+    return `<tr>
+      <td>${u.nombre||''} ${u.apellido||''}</td>
+      <td>${u.empresa||'—'}</td>
+      <td style="font-size:.78rem">${u.email||'—'}</td>
+      <td>${u.telefono||'—'}</td>
+      <td style="font-size:.78rem">${u.cuit||'—'}</td>
+      <td>${rolSelect}</td>
+      <td>${estadoBadge}</td>
+      <td>${vendedorSelect}</td>
+      <td>${acciones}</td>
+    </tr>`;
+  }).join('');
+}
+
+window.cambiarEstadoUsuario = async (uid, nuevoEstado) => {
+  try {
+    await updateDoc(doc(db,'usuarios',uid), {estado: nuevoEstado, updatedAt: serverTimestamp()});
+    await loadUsuariosPortal();
+    showToast(`Usuario ${nuevoEstado === 'activo' ? 'aprobado' : 'desactivado'} correctamente`);
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+
+window.cambiarRol = async (uid, nuevoRol) => {
+  try {
+    await updateDoc(doc(db,'usuarios',uid), {rol: nuevoRol, updatedAt: serverTimestamp()});
+    await loadUsuariosPortal();
+    showToast('Rol actualizado');
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+
+window.asignarVendedor = async (uid, vendedorId) => {
+  try {
+    await updateDoc(doc(db,'usuarios',uid), {vendedorId: vendedorId || null, updatedAt: serverTimestamp()});
+    showToast('Vendedor asignado');
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+
+// ── PEDIDOS PORTAL ─────────────────────────────────────
+async function loadPedidosPortal() {
+  const snap = await getDocs(query(collection(db,'pedidos'), orderBy('createdAt','desc')));
+  allPedidosPortal = snap.docs.map(d => ({id:d.id,...d.data()}));
+  renderPedidosPortal();
+}
+
+window.renderPedidosPortal = () => {
+  const filtroEstado = document.getElementById('filter-estado-pedido')?.value || '';
+  const filtered = filtroEstado ? allPedidosPortal.filter(p=>p.estado===filtroEstado) : allPedidosPortal;
+  const tbody = document.getElementById('tbody-pedidos-portal');
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="9" class="empty-state">Sin pedidos</td></tr>';
+    return;
+  }
+
+  const estadoLabels = {recibido:'Recibido',preparacion:'En preparación',despachado:'Despachado',entregado:'Entregado'};
+  const estadoClasses = {recibido:'badge-recibido',preparacion:'badge-preparacion',despachado:'badge-despachado',entregado:'badge-entregado'};
+
+  tbody.innerHTML = filtered.map((p,i) => {
+    const num = filtered.length - i;
+    const fecha = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleDateString('es-AR') : '—';
+    const prods = (p.productos||[]).slice(0,2).map(x=>x.nombre).join(', ') + (p.productos?.length>2?'...':'');
+    const vendedor = allVendedores.find(v=>v.id===p.vendedorId);
+    const vendNombre = vendedor ? vendedor.nombre+' '+vendedor.apellido : '—';
+    const estadoBadge = `<span class="estado-badge ${estadoClasses[p.estado]||''}">${estadoLabels[p.estado]||p.estado}</span>`;
+    const remito = p.remitoUrl
+      ? `<a href="${p.remitoUrl}" target="_blank" class="btn-xs verde">Ver remito</a>`
+      : '<span style="color:var(--text3);font-size:.75rem">Pendiente</span>';
+    const estadoSelect = `<select class="portal-select" onchange="cambiarEstadoPedido('${p.id}',this.value)">
+      <option value="recibido" ${p.estado==='recibido'?'selected':''}>Recibido</option>
+      <option value="preparacion" ${p.estado==='preparacion'?'selected':''}>En preparación</option>
+      <option value="despachado" ${p.estado==='despachado'?'selected':''}>Despachado</option>
+      <option value="entregado" ${p.estado==='entregado'?'selected':''}>Entregado</option>
+    </select>`;
+
+    return `<tr>
+      <td style="color:var(--text3);font-size:.75rem">#${num}</td>
+      <td>${p.clienteNombre||'—'}</td>
+      <td>${p.clienteEmpresa||'—'}</td>
+      <td>${vendNombre}</td>
+      <td>${fecha}</td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.78rem">${prods}</td>
+      <td>${estadoSelect}</td>
+      <td>${remito}</td>
+      <td><button class="btn-xs" onclick="verDetallePedido('${p.id}')">Ver</button></td>
+    </tr>`;
+  }).join('');
+};
+
+window.cambiarEstadoPedido = async (pedidoId, nuevoEstado) => {
+  try {
+    await updateDoc(doc(db,'pedidos',pedidoId), {estado:nuevoEstado, updatedAt:serverTimestamp()});
+    const idx = allPedidosPortal.findIndex(p=>p.id===pedidoId);
+    if (idx >= 0) allPedidosPortal[idx].estado = nuevoEstado;
+    renderPedidosPortal();
+    showToast('Estado actualizado');
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+
+window.verDetallePedido = (pedidoId) => {
+  const p = allPedidosPortal.find(x=>x.id===pedidoId);
+  if (!p) return;
+  const prods = (p.productos||[]).map(x=>`${x.nombre} (x${x.cantidad})`).join('\n');
+  const obs = p.observaciones ? '\nObservaciones: '+p.observaciones : '';
+  alert(`Pedido de ${p.clienteNombre}\nEmpresa: ${p.clienteEmpresa}\n\nProductos:\n${prods}${obs}`);
+};
+
+// ── DOCUMENTOS ─────────────────────────────────────────
+async function loadDocumentosPortal() {
+  const snap = await getDocs(query(collection(db,'documentos'), orderBy('createdAt','desc')));
+  allDocumentosPortal = snap.docs.map(d => ({id:d.id,...d.data()}));
+  renderDocumentosPortal();
+}
+
+function renderDocumentosPortal() {
+  const tbody = document.getElementById('tbody-documentos');
+  if (!allDocumentosPortal.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Sin documentos publicados</td></tr>';
+    return;
+  }
+  const tipoLabels = {catalogo:'Catálogo',lista:'Lista de precios',promo:'Promoción'};
+  tbody.innerHTML = allDocumentosPortal.map(d => {
+    const fecha = d.createdAt?.toDate ? d.createdAt.toDate().toLocaleDateString('es-AR') : '—';
+    const estado = d.activo
+      ? `<span class="estado-badge badge-activo">Activo</span>`
+      : `<span class="estado-badge badge-rechazado">Inactivo</span>`;
+    return `<tr>
+      <td>${d.nombre||'—'}</td>
+      <td>${tipoLabels[d.tipo]||d.tipo||'—'}</td>
+      <td>${fecha}</td>
+      <td>${estado}</td>
+      <td>
+        <a href="${d.url}" target="_blank" class="btn-xs">Ver</a>
+        <button class="btn-xs ${d.activo?'rojo':'verde'}" onclick="toggleDocumento('${d.id}',${!d.activo})" style="margin-left:4px">${d.activo?'Desactivar':'Activar'}</button>
+        <button class="btn-xs" onclick="eliminarDocumento('${d.id}')" style="margin-left:4px;border-color:#333">Eliminar</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+window.subirDocumento = async () => {
+  const nombre = document.getElementById('doc-nombre').value.trim();
+  const tipo   = document.getElementById('doc-tipo').value;
+  const url    = document.getElementById('doc-url').value.trim();
+  if (!nombre || !url) { showToast('Completá nombre y URL','error'); return; }
+  try {
+    await addDoc(collection(db,'documentos'), {nombre, tipo, url, activo:true, createdAt:serverTimestamp()});
+    document.getElementById('doc-nombre').value='';
+    document.getElementById('doc-url').value='';
+    await loadDocumentosPortal();
+    showToast('✓ Documento publicado');
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+
+window.toggleDocumento = async (id, activo) => {
+  try {
+    await updateDoc(doc(db,'documentos',id), {activo, updatedAt:serverTimestamp()});
+    await loadDocumentosPortal();
+    showToast(activo ? 'Documento activado' : 'Documento desactivado');
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+
+window.eliminarDocumento = async (id) => {
+  if (!confirm('¿Eliminar este documento? Esta acción no se puede deshacer.')) return;
+  try {
+    await deleteDoc(doc(db,'documentos',id));
+    await loadDocumentosPortal();
+    showToast('Documento eliminado');
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+
 </script>
 </body>
 </html>
