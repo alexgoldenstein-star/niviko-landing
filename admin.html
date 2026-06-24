@@ -354,6 +354,46 @@ tbody td{padding:12px 16px;color:var(--text2)}
   animation: spin 0.7s linear infinite;
 }
 
+
+/* OFERTAS ADMIN */
+.oferta-admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin-bottom:2rem}
+.oferta-admin-card{background:var(--bg2);border:1px solid var(--border);overflow:hidden}
+.oferta-admin-img{width:100%;height:120px;object-fit:cover;background:var(--bg3)}
+.oferta-admin-body{padding:1rem}
+.oferta-admin-nombre{font-family:"Barlow Condensed",sans-serif;font-size:1rem;font-weight:800;text-transform:uppercase;margin-bottom:.25rem}
+.oferta-admin-desc{font-size:.78rem;color:var(--text3);margin-bottom:.75rem}
+.oferta-admin-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+/* CHAT ADMIN */
+.chat-admin-layout{display:grid;grid-template-columns:260px 1fr;gap:0;background:var(--border);height:500px;border:1px solid var(--border)}
+.chat-contacts{background:var(--bg2);overflow-y:auto;display:flex;flex-direction:column}
+.chat-contact-item{padding:.85rem 1rem;cursor:pointer;border-bottom:1px solid var(--border);transition:background .15s;display:flex;align-items:center;gap:.65rem}
+.chat-contact-item:hover{background:var(--bg3)}
+.chat-contact-item.active{background:var(--bg3);border-left:2px solid var(--rojo)}
+.chat-contact-name{font-size:.85rem;font-weight:500;color:var(--text1)}
+.chat-contact-empresa{font-size:.72rem;color:var(--text3)}
+.chat-contact-unread{background:var(--rojo);color:#fff;font-family:"Barlow Condensed",sans-serif;font-size:.65rem;font-weight:700;padding:.1rem .4rem;border-radius:2px;margin-left:auto;flex-shrink:0}
+.chat-panel{display:flex;flex-direction:column;background:var(--negro)}
+.chat-panel-header{padding:.85rem 1rem;border-bottom:1px solid var(--border);background:var(--bg2)}
+.chat-panel-name{font-family:"Barlow Condensed",sans-serif;font-size:.9rem;font-weight:700;text-transform:uppercase}
+.chat-panel-empresa{font-size:.72rem;color:var(--text3)}
+.chat-msgs-admin{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.5rem}
+.admin-msg{max-width:70%;padding:.55rem .8rem;font-size:.8rem;line-height:1.5;border-radius:2px}
+.admin-msg.from-client{background:var(--bg2);align-self:flex-start;color:var(--text2)}
+.admin-msg.from-admin{background:var(--rojo);align-self:flex-end;color:#fff}
+.admin-msg-meta{font-size:.62rem;opacity:.55;margin-top:.2rem}
+.chat-input-row{display:flex;border-top:1px solid var(--border)}
+.chat-input-admin{flex:1;background:var(--bg2);border:none;color:var(--text1);font-family:"Barlow",sans-serif;font-size:.82rem;padding:.75rem 1rem;outline:none;resize:none}
+.chat-send{background:var(--rojo);border:none;color:#fff;padding:0 1.2rem;cursor:pointer;font-size:1rem;transition:background .15s;flex-shrink:0}
+.chat-send:hover{background:#a93226}
+/* REMITO */
+.remito-preview-box{width:100%;height:180px;background:var(--bg3);border:1px dashed var(--border);display:flex;align-items:center;justify-content:center;margin-top:6px;overflow:hidden;position:relative}
+.remito-preview-box img{width:100%;height:100%;object-fit:contain;padding:4px}
+/* CRM PROSPECTOR */
+.crm-table{width:100%;border-collapse:collapse}
+.crm-table th{font-family:"Barlow Condensed",sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);padding:.6rem 1rem;text-align:left;border-bottom:1px solid var(--border)}
+.crm-table td{padding:.7rem 1rem;border-bottom:1px solid var(--border);font-size:.82rem;color:var(--text2);vertical-align:middle}
+.crm-table tr:hover td{background:var(--bg3)}
+
 </style>
 </head>
 <body>
@@ -416,6 +456,16 @@ tbody td{padding:12px 16px;color:var(--text2)}
         </div>
         <div class="nav-item" onclick="showPage('portal-documentos')">
           <span class="nav-icon">📄</span> Documentos
+        </div>
+        <div class="nav-item" onclick="showPage('portal-ofertas')">
+          <span class="nav-icon">🏷️</span> Ofertas
+        </div>
+        <div class="nav-item" onclick="showPage('portal-mensajes')">
+          <span class="nav-icon">💬</span> Mensajes <span id="unread-badge" style="background:var(--rojo);color:#fff;font-size:.6rem;padding:.1rem .35rem;border-radius:2px;margin-left:4px;display:none">!</span>
+        </div>
+        <div style="border-top:1px solid #1a1a1a;margin:.75rem 0"></div>
+        <div class="nav-item" onclick="showPage('crm-prospector')">
+          <span class="nav-icon">📇</span> CRM
         </div>
       </nav>
       <div class="sidebar-footer">
@@ -728,6 +778,88 @@ tbody td{padding:12px 16px;color:var(--text2)}
         <table class="portal-table">
           <thead><tr><th>Nombre</th><th>Tipo</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead>
           <tbody id="tbody-documentos"></tbody>
+        </table>
+      </div>
+
+
+      <!-- ═══ PORTAL: PEDIDOS (actualizado con remito JPG + estado pago) ═══ -->
+      <!-- (ya existente, se parchea via JS) -->
+
+      <!-- ═══ OFERTAS ═══ -->
+      <div class="page" id="page-portal-ofertas">
+        <div class="page-header"><div class="page-tag">Portal</div><div class="page-title">Ofertas para clientes</div></div>
+        <div style="background:var(--bg2);border:1px solid var(--border);padding:1.5rem;margin-bottom:1.5rem">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);margin-bottom:1rem">Nueva oferta</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;align-items:end">
+            <div class="doc-form-field"><label>Nombre</label><input type="text" id="oferta-nombre" placeholder="Silla gamer 50% off"></div>
+            <div class="doc-form-field"><label>Badge (etiqueta)</label><input type="text" id="oferta-badge" placeholder="Oferta especial / Liquidación"></div>
+            <div class="doc-form-field"><label>Precio ($)</label><input type="number" id="oferta-precio" placeholder="15000"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.75rem">
+            <div class="doc-form-field"><label>Precio anterior ($) <span style="color:var(--text3);font-weight:400">(opcional)</span></label><input type="number" id="oferta-precio-old" placeholder="30000"></div>
+            <div class="doc-form-field"><label>Descripción</label><input type="text" id="oferta-desc" placeholder="Válido hasta fin de stock"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:end;margin-top:.75rem">
+            <div class="doc-form-field" style="margin:0">
+              <label>Imagen (URL o subir JPG)</label>
+              <div style="display:flex;gap:6px">
+                <input type="url" id="oferta-imagen-url" placeholder="https://..." style="flex:1;background:var(--negro);border:1px solid var(--border);color:var(--text1);font-size:.85rem;padding:.6rem .85rem;outline:none">
+                <label style="display:inline-flex;align-items:center;gap:5px;padding:0 12px;background:var(--bg3);border:1px solid var(--border);cursor:pointer;font-size:.78rem;color:var(--text2);white-space:nowrap">
+                  📎 Subir
+                  <input type="file" accept="image/*" style="display:none" onchange="uploadOfertaImg(this)">
+                </label>
+              </div>
+            </div>
+            <button class="btn-primary" onclick="crearOferta()" style="white-space:nowrap">+ Publicar oferta</button>
+          </div>
+        </div>
+        <div class="oferta-admin-grid" id="ofertas-admin-grid"></div>
+      </div>
+
+      <!-- ═══ MENSAJES (chat interno) ═══ -->
+      <div class="page" id="page-portal-mensajes">
+        <div class="page-header"><div class="page-tag">Portal</div><div class="page-title">Mensajes de clientes</div></div>
+        <div class="chat-admin-layout">
+          <div class="chat-contacts" id="chat-contacts-list">
+            <div style="color:var(--text3);font-size:.8rem;padding:1rem">Cargando...</div>
+          </div>
+          <div class="chat-panel">
+            <div class="chat-panel-header">
+              <div class="chat-panel-name" id="chat-panel-name">Seleccioná un cliente</div>
+              <div class="chat-panel-empresa" id="chat-panel-empresa"></div>
+            </div>
+            <div class="chat-msgs-admin" id="chat-msgs-admin">
+              <div style="color:var(--text3);font-size:.8rem;text-align:center;padding:2rem">Elegí un cliente de la izquierda</div>
+            </div>
+            <div class="chat-input-row">
+              <textarea class="chat-input-admin" id="chat-input-admin" placeholder="Responder..." rows="1"
+                onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAdminMsg()}"></textarea>
+              <button class="chat-send" onclick="sendAdminMsg()">➤</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ CRM PROSPECTOR ═══ -->
+      <div class="page" id="page-crm-prospector">
+        <div class="page-header"><div class="page-tag">CRM</div><div class="page-title">Prospector</div></div>
+        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center">
+          <input class="search-input" type="text" id="crm-search" placeholder="Buscar por nombre o empresa..." oninput="filterCRM()" style="max-width:300px">
+          <select class="portal-select" id="crm-filter-estado" onchange="filterCRM()">
+            <option value="">Todos los estados</option>
+            <option value="nuevo">Nuevo</option>
+            <option value="contactado">Contactado</option>
+            <option value="cliente">Cliente</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+          <span id="crm-count" style="font-size:.78rem;color:var(--text3)"></span>
+        </div>
+        <table class="crm-table">
+          <thead><tr>
+            <th>Nombre</th><th>Empresa</th><th>Teléfono</th><th>Email</th>
+            <th>Estado</th><th>Pedidos portal</th><th>Notas</th>
+          </tr></thead>
+          <tbody id="crm-tbody"></tbody>
         </table>
       </div>
 
@@ -1977,6 +2109,359 @@ function resetGallery() {
   galleryImages = ['','','','',''];
   renderGallery();
 }
+
+
+// ══════════════════════════════════════════════════════
+// ADMIN — Ofertas, Remito JPG, Estado Pago, Mensajes, CRM
+// ══════════════════════════════════════════════════════
+
+// ─── OVERRIDE showPage para cargar datos de portal ────
+const _adminShowPage = window.showPage;
+window.showPage = (name) => {
+  _adminShowPage(name);
+  if (name === 'portal-usuarios'  && !allUsuariosPortal.length) loadUsuariosPortal();
+  if (name === 'portal-pedidos'   && !allPedidosPortal.length)  loadPedidosPortal();
+  if (name === 'portal-documentos') loadDocumentosPortal();
+  if (name === 'portal-ofertas')    loadOfertasAdmin();
+  if (name === 'portal-mensajes')   loadMensajesAdmin();
+  if (name === 'crm-prospector')    loadCRM();
+};
+
+// ─── REMITO JPG: upload desde admin en portal-pedidos ─
+window.uploadRemitoJpg = async (input, pedidoId) => {
+  const file = input.files[0];
+  if (!file) return;
+  const btn = document.querySelector(`[data-pedido="${pedidoId}"] .btn-remito-upload`);
+  if (btn) { btn.textContent = 'Subiendo...'; btn.disabled = true; }
+  try {
+    const filename = `remitos/${pedidoId}_${Date.now()}.${file.name.split('.').pop()}`;
+    const storageRef = ref(storage, filename);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    await updateDoc(doc(db,'pedidos',pedidoId), {remitoUrl: url, updatedAt: serverTimestamp()});
+    const idx = allPedidosPortal.findIndex(p=>p.id===pedidoId);
+    if (idx>=0) allPedidosPortal[idx].remitoUrl = url;
+    renderPedidosPortal();
+    showToast('✓ Remito subido y visible para el cliente');
+  } catch(e) { showToast('Error: '+e.message,'error'); if(btn){btn.textContent='Subir JPG';btn.disabled=false;} }
+};
+
+// ─── ESTADO DE PAGO en portal-pedidos ─────────────────
+window.cambiarEstadoPago = async (pedidoId, estadoPago) => {
+  try {
+    await updateDoc(doc(db,'pedidos',pedidoId), {estadoPago, updatedAt: serverTimestamp()});
+    const idx = allPedidosPortal.findIndex(p=>p.id===pedidoId);
+    if (idx>=0) allPedidosPortal[idx].estadoPago = estadoPago;
+    showToast('Estado de pago actualizado');
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+
+// Parchear renderPedidosPortal para agregar columnas remito JPG + estado pago
+const _origRenderPedidos = window.renderPedidosPortal;
+window.renderPedidosPortal = () => {
+  const filtroEstado = document.getElementById('filter-estado-pedido')?.value || '';
+  const filtered = filtroEstado ? allPedidosPortal.filter(p=>p.estado===filtroEstado) : allPedidosPortal;
+  const tbody = document.getElementById('tbody-pedidos-portal');
+  if (!tbody) return;
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="10" class="empty-state">Sin pedidos</td></tr>'; return;
+  }
+  const estadoLabels = {recibido:'Recibido',preparacion:'En preparación',despachado:'Despachado',entregado:'Entregado'};
+  const estadoClasses = {recibido:'badge-recibido',preparacion:'badge-preparacion',despachado:'badge-despachado',entregado:'badge-entregado'};
+  const pagoLabels = {pendiente:'Pendiente',parcial:'Parcial',pagado:'Pagado'};
+
+  tbody.innerHTML = filtered.map((p,i) => {
+    const num = filtered.length - i;
+    const fecha = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleDateString('es-AR') : '—';
+    const prods = (p.productos||[]).slice(0,2).map(x=>x.nombre).join(', ') + (p.productos?.length>2?'...':'');
+    const vendedor = allVendedores.find(v=>v.id===p.vendedorId);
+    const vendNombre = vendedor ? vendedor.nombre+' '+vendedor.apellido : '—';
+    const estadoBadge = `<span class="estado-badge ${estadoClasses[p.estado]||''}">${estadoLabels[p.estado]||p.estado}</span>`;
+    const estadoSelect = `<select class="portal-select" onchange="cambiarEstadoPedido('${p.id}',this.value)">
+      <option value="recibido" ${p.estado==='recibido'?'selected':''}>Recibido</option>
+      <option value="preparacion" ${p.estado==='preparacion'?'selected':''}>Preparando</option>
+      <option value="despachado" ${p.estado==='despachado'?'selected':''}>Despachado</option>
+      <option value="entregado" ${p.estado==='entregado'?'selected':''}>Entregado</option>
+    </select>`;
+    const pagoSelect = `<select class="portal-select" onchange="cambiarEstadoPago('${p.id}',this.value)">
+      <option value="pendiente" ${(!p.estadoPago||p.estadoPago==='pendiente')?'selected':''}>Pendiente</option>
+      <option value="parcial" ${p.estadoPago==='parcial'?'selected':''}>Parcial</option>
+      <option value="pagado" ${p.estadoPago==='pagado'?'selected':''}>Pagado</option>
+    </select>`;
+    const remitoCell = p.remitoUrl
+      ? `<a href="${p.remitoUrl}" target="_blank" class="btn-xs verde" style="margin-right:4px">Ver</a>
+         <label class="btn-xs" style="cursor:pointer">Reemplazar<input type="file" accept="image/*,application/pdf" style="display:none" onchange="uploadRemitoJpg(this,'${p.id}')"></label>`
+      : `<label class="btn-xs btn-remito-upload" data-pedido="${p.id}" style="cursor:pointer">📎 Subir JPG
+           <input type="file" accept="image/*" style="display:none" onchange="uploadRemitoJpg(this,'${p.id}')">
+         </label>`;
+
+    return `<tr data-pedido="${p.id}">
+      <td style="color:var(--text3);font-size:.72rem">#${num}</td>
+      <td>${p.clienteNombre||'—'}</td>
+      <td>${p.clienteEmpresa||'—'}</td>
+      <td>${vendNombre}</td>
+      <td>${fecha}</td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.76rem">${prods}</td>
+      <td>${estadoSelect}</td>
+      <td>${pagoSelect}</td>
+      <td>${remitoCell}</td>
+      <td><button class="btn-xs" onclick="verDetallePedido('${p.id}')">Ver</button></td>
+    </tr>`;
+  }).join('');
+};
+
+// Actualizar header tabla pedidos para incluir nuevas columnas
+const pedidosTable = document.querySelector('#page-portal-pedidos thead tr');
+if (pedidosTable) {
+  pedidosTable.innerHTML = '<th>#</th><th>Cliente</th><th>Empresa</th><th>Vendedor</th><th>Fecha</th><th>Productos</th><th>Estado</th><th>Pago</th><th>Remito</th><th></th>';
+}
+
+// ─── OFERTAS ADMIN ─────────────────────────────────────
+let allOfertasAdmin = [];
+async function loadOfertasAdmin() {
+  const snap = await getDocs(query(collection(db,'ofertas'), orderBy('createdAt','desc')));
+  allOfertasAdmin = snap.docs.map(d=>({id:d.id,...d.data()}));
+  renderOfertasAdmin();
+}
+
+function renderOfertasAdmin() {
+  const grid = document.getElementById('ofertas-admin-grid');
+  if (!allOfertasAdmin.length) {
+    grid.innerHTML = '<div class="empty-state">No hay ofertas creadas</div>'; return;
+  }
+  grid.innerHTML = allOfertasAdmin.map(o => `
+    <div class="oferta-admin-card">
+      ${o.imagen?`<img class="oferta-admin-img" src="${o.imagen}" alt="${o.nombre}">`:'<div class="oferta-admin-img" style="display:flex;align-items:center;justify-content:center;font-size:2rem">🏷️</div>'}
+      <div class="oferta-admin-body">
+        <div class="oferta-admin-nombre">${o.nombre}</div>
+        <div class="oferta-admin-desc">${o.descripcion||''}</div>
+        <div class="oferta-admin-actions">
+          <button class="btn-xs ${o.activa?'rojo':'verde'}" onclick="toggleOferta('${o.id}',${!o.activa})">${o.activa?'Desactivar':'Activar'}</button>
+          <button class="btn-xs" onclick="eliminarOferta('${o.id}')" style="border-color:#333">Eliminar</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+window.uploadOfertaImg = async (input) => {
+  const file = input.files[0]; if(!file) return;
+  try {
+    const filename = `ofertas/${Date.now()}.${file.name.split('.').pop()}`;
+    const sRef = ref(storage, filename);
+    await uploadBytes(sRef, file);
+    const url = await getDownloadURL(sRef);
+    document.getElementById('oferta-imagen-url').value = url;
+    showToast('✓ Imagen subida');
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+
+window.crearOferta = async () => {
+  const nombre = document.getElementById('oferta-nombre').value.trim();
+  if (!nombre) { showToast('Ingresá un nombre','error'); return; }
+  try {
+    await addDoc(collection(db,'ofertas'), {
+      nombre,
+      badge: document.getElementById('oferta-badge').value.trim() || 'Oferta especial',
+      descripcion: document.getElementById('oferta-desc').value.trim(),
+      precio: parseFloat(document.getElementById('oferta-precio').value)||null,
+      precioAnterior: parseFloat(document.getElementById('oferta-precio-old').value)||null,
+      imagen: document.getElementById('oferta-imagen-url').value.trim(),
+      activa: true,
+      createdAt: serverTimestamp()
+    });
+    ['oferta-nombre','oferta-badge','oferta-desc','oferta-precio','oferta-precio-old','oferta-imagen-url'].forEach(id=>{
+      document.getElementById(id).value='';
+    });
+    await loadOfertasAdmin();
+    showToast('✓ Oferta publicada');
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+
+window.toggleOferta = async (id, activa) => {
+  await updateDoc(doc(db,'ofertas',id),{activa,updatedAt:serverTimestamp()});
+  await loadOfertasAdmin();
+  showToast(activa?'Oferta activada':'Oferta desactivada');
+};
+window.eliminarOferta = async (id) => {
+  if (!confirm('¿Eliminar esta oferta?')) return;
+  await deleteDoc(doc(db,'ofertas',id));
+  await loadOfertasAdmin();
+  showToast('Oferta eliminada');
+};
+
+// ─── MENSAJES ADMIN ────────────────────────────────────
+let chatClienteActivo = null, chatMsgsUnsub = null;
+
+async function loadMensajesAdmin() {
+  // Obtener lista de clientes con mensajes
+  const snap = await getDocs(query(collection(db,'mensajes'), orderBy('createdAt','desc')));
+  const msgs = snap.docs.map(d=>({id:d.id,...d.data()}));
+  // Agrupar por clienteId
+  const byCliente = {};
+  msgs.forEach(m => {
+    if (!byCliente[m.clienteId]) byCliente[m.clienteId] = {
+      clienteId: m.clienteId,
+      clienteNombre: m.clienteNombre||'—',
+      clienteEmpresa: m.clienteEmpresa||'',
+      unread: 0, lastMsg: m
+    };
+    if (!m.leido && m.autorRol==='cliente') byCliente[m.clienteId].unread++;
+  });
+  const lista = Object.values(byCliente);
+  const contactsList = document.getElementById('chat-contacts-list');
+  if (!lista.length) {
+    contactsList.innerHTML='<div style="color:var(--text3);font-size:.8rem;padding:1rem">Sin mensajes</div>'; return;
+  }
+  contactsList.innerHTML = lista.map(c => `
+    <div class="chat-contact-item ${chatClienteActivo===c.clienteId?'active':''}"
+         onclick="abrirChatCliente('${c.clienteId}','${c.clienteNombre.replace(/'/g,"\'")}','${c.clienteEmpresa.replace(/'/g,"\'")}')">
+      <div>
+        <div class="chat-contact-name">${c.clienteNombre}</div>
+        <div class="chat-contact-empresa">${c.clienteEmpresa}</div>
+      </div>
+      ${c.unread>0?`<span class="chat-contact-unread">${c.unread}</span>`:''}
+    </div>`).join('');
+
+  // Badge de no leídos en nav
+  const totalUnread = lista.reduce((s,c)=>s+c.unread,0);
+  const badge = document.getElementById('unread-badge');
+  if (badge) badge.style.display = totalUnread>0?'inline':'none';
+}
+
+window.abrirChatCliente = async (clienteId, nombre, empresa) => {
+  chatClienteActivo = clienteId;
+  document.getElementById('chat-panel-name').textContent = nombre;
+  document.getElementById('chat-panel-empresa').textContent = empresa;
+  if (chatMsgsUnsub) chatMsgsUnsub();
+  const { onSnapshot } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+  const q = query(collection(db,'mensajes'), where('clienteId','==',clienteId), orderBy('createdAt','asc'));
+  chatMsgsUnsub = onSnapshot(q, snap => {
+    const msgs = snap.docs.map(d=>({id:d.id,...d.data()}));
+    const el = document.getElementById('chat-msgs-admin');
+    el.innerHTML = msgs.map(m => {
+      const fromAdmin = m.autorRol==='admin';
+      const hora = m.createdAt?.toDate ? m.createdAt.toDate().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}) : '';
+      return `<div class="admin-msg ${fromAdmin?'from-admin':'from-client'}">
+        ${m.texto}
+        <div class="admin-msg-meta">${m.autorNombre||''} · ${hora}</div>
+      </div>`;
+    }).join('');
+    el.scrollTop = el.scrollHeight;
+    // Marcar como leídos
+    msgs.filter(m=>!m.leido&&m.autorRol==='cliente').forEach(m=>{
+      updateDoc(doc(db,'mensajes',m.id),{leido:true});
+    });
+  });
+  loadMensajesAdmin(); // refrescar lista de contactos
+};
+
+window.sendAdminMsg = async () => {
+  if (!chatClienteActivo) return;
+  const input = document.getElementById('chat-input-admin');
+  const texto = input.value.trim(); if (!texto) return;
+  input.value = '';
+  await addDoc(collection(db,'mensajes'), {
+    clienteId: chatClienteActivo,
+    texto,
+    autorRol: 'admin',
+    autorNombre: 'NIVIKO',
+    leido: false,
+    createdAt: serverTimestamp()
+  });
+};
+
+// ─── CRM PROSPECTOR ────────────────────────────────────
+const PROSPECTOR_DB = 'https://prospector-crm-8c646-default-rtdb.firebaseio.com';
+let crmContactos = [], crmPedidosPorEmail = {};
+
+async function loadCRM() {
+  try {
+    // 1. Cargar contactos del Prospector (Realtime DB vía REST público)
+    const r = await fetch(`${PROSPECTOR_DB}/contactos.json?limitToFirst=500`);
+    const data = await r.json();
+    crmContactos = data ? Object.entries(data).map(([k,v])=>({_key:k,...v})) : [];
+
+    // 2. Cruzar con pedidos del portal por email
+    const pedidosSnap = await getDocs(query(collection(db,'pedidos'), orderBy('createdAt','desc')));
+    const usuariosSnap = await getDocs(collection(db,'usuarios'));
+    const usuariosPorUid = {};
+    usuariosSnap.docs.forEach(d=>{usuariosPorUid[d.id]={...d.data()}});
+
+    crmPedidosPorEmail = {};
+    pedidosSnap.docs.forEach(d=>{
+      const p = d.data();
+      const u = usuariosPorUid[p.clienteId];
+      if (u?.email) {
+        if (!crmPedidosPorEmail[u.email]) crmPedidosPorEmail[u.email]=0;
+        crmPedidosPorEmail[u.email]++;
+      }
+    });
+
+    document.getElementById('crm-count').textContent = `${crmContactos.length} contactos`;
+    renderCRM(crmContactos);
+  } catch(e) {
+    document.getElementById('crm-tbody').innerHTML = `<tr><td colspan="7" class="empty-state">Error cargando CRM: ${e.message}</td></tr>`;
+  }
+}
+
+function renderCRM(lista) {
+  const tbody = document.getElementById('crm-tbody');
+  if (!lista.length) { tbody.innerHTML='<tr><td colspan="7" class="empty-state">Sin contactos</td></tr>'; return; }
+  tbody.innerHTML = lista.slice(0,200).map(c => {
+    const pedidos = crmPedidosPorEmail[c.email]||0;
+    const estadoColor = {nuevo:'#ffc800',contactado:'#4a9eff',cliente:'#4ade80',inactivo:'#555'}[c.estado]||'#555';
+    return `<tr>
+      <td>${c.nombre||c.name||'—'}</td>
+      <td>${c.empresa||c.company||'—'}</td>
+      <td>${c.telefono||c.phone||'—'}</td>
+      <td style="font-size:.75rem">${c.email||'—'}</td>
+      <td><span style="color:${estadoColor};font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:700;text-transform:uppercase">${c.estado||'nuevo'}</span></td>
+      <td style="text-align:center">${pedidos>0?`<span style="color:#4ade80;font-weight:700">${pedidos}</span>`:'—'}</td>
+      <td style="font-size:.75rem;color:var(--text3);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.notas||c.notes||'—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+window.filterCRM = () => {
+  const q = document.getElementById('crm-search').value.toLowerCase();
+  const estado = document.getElementById('crm-filter-estado').value;
+  let filtered = crmContactos;
+  if (q) filtered = filtered.filter(c=>(c.nombre||c.name||'').toLowerCase().includes(q)||(c.empresa||c.company||'').toLowerCase().includes(q));
+  if (estado) filtered = filtered.filter(c=>(c.estado||'nuevo')===estado);
+  document.getElementById('crm-count').textContent = `${filtered.length} de ${crmContactos.length} contactos`;
+  renderCRM(filtered);
+};
+
+// ─── SYNC: pedido portal → Prospector ─────────────────
+// Se llama automáticamente cuando un cliente hace un pedido
+// (El portal ya guarda el pedido en Firestore, esto agrega/actualiza en Prospector)
+async function syncPedidoToProspector(clienteData, pedidoId) {
+  try {
+    const email = clienteData.email;
+    if (!email) return;
+    // Buscar si ya existe en Prospector
+    const r = await fetch(`${PROSPECTOR_DB}/contactos.json?orderBy="email"&equalTo="${email}"&limitToFirst=1`);
+    const data = await r.json();
+    const existente = data ? Object.entries(data)[0] : null;
+    const update = {
+      nombre: clienteData.nombre + ' ' + clienteData.apellido,
+      empresa: clienteData.empresa||'',
+      email,
+      telefono: clienteData.telefono||'',
+      estado: 'cliente',
+      notas: `Portal NIVIKO — último pedido: ${new Date().toLocaleDateString('es-AR')}`,
+      ultimoPedidoPortal: pedidoId,
+      updatedAt: new Date().toISOString()
+    };
+    if (existente) {
+      await fetch(`${PROSPECTOR_DB}/contactos/${existente[0]}.json`, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(update)});
+    } else {
+      await fetch(`${PROSPECTOR_DB}/contactos.json`, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...update,createdAt:new Date().toISOString()})});
+    }
+  } catch(e) { console.warn('Prospector sync error:', e); }
+}
+// Exponer para que el dashboard-cliente lo llame si comparte contexto
+window.syncPedidoToProspector = syncPedidoToProspector;
 
 </script>
 </body>

@@ -106,6 +106,62 @@
       aside{display:none}
       .pedido-builder{grid-template-columns:1fr}
     }
+  
+/* OFERTAS */
+.oferta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
+.oferta-card{background:var(--bg2);border:1px solid var(--border);overflow:hidden;transition:border-color .2s}
+.oferta-card:hover{border-color:#333}
+.oferta-img{width:100%;height:150px;object-fit:cover;background:var(--bg3);display:block}
+.oferta-img-placeholder{width:100%;height:150px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:2rem}
+.oferta-body{padding:1rem}
+.oferta-badge{font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--rojo);margin-bottom:.3rem}
+.oferta-nombre{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:800;text-transform:uppercase;margin-bottom:.3rem}
+.oferta-desc{font-size:.8rem;color:var(--text3);line-height:1.5;margin-bottom:.75rem}
+.oferta-precio{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;color:var(--rojo)}
+.oferta-precio-old{font-size:.8rem;color:var(--text3);text-decoration:line-through;margin-left:.4rem}
+/* PEDIDO DETALLE - estado + remito */
+.pedido-detalle{background:var(--bg2);border:1px solid var(--border);margin-bottom:.5rem}
+.pedido-header{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1rem;cursor:pointer;gap:1rem;flex-wrap:wrap}
+.pedido-header:hover{background:var(--bg3)}
+.pedido-num{font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:700;color:var(--text3)}
+.pedido-empresa{font-size:.82rem;color:var(--text2)}
+.pedido-body{padding:1rem;border-top:1px solid var(--border);display:none}
+.pedido-body.open{display:block}
+.pedido-track{display:flex;gap:0;margin:1rem 0;overflow-x:auto;padding-bottom:.5rem}
+.track-step{display:flex;flex-direction:column;align-items:center;flex:1;min-width:80px;position:relative}
+.track-step::before{content:'';position:absolute;top:12px;left:-50%;width:100%;height:2px;background:var(--border);z-index:0}
+.track-step:first-child::before{display:none}
+.track-step.done::before{background:var(--rojo)}
+.track-dot{width:24px;height:24px;border-radius:50%;background:var(--bg4);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.65rem;position:relative;z-index:1;transition:all .3s}
+.track-step.done .track-dot{background:var(--rojo);border-color:var(--rojo);color:#fff}
+.track-step.active .track-dot{border-color:var(--rojo);background:var(--bg4);color:var(--rojo)}
+.track-label{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-top:.4rem;text-align:center}
+.track-step.done .track-label,.track-step.active .track-label{color:var(--text2)}
+.pago-badge{display:inline-flex;align-items:center;gap:.35rem;font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .65rem}
+.pago-pendiente{background:rgba(255,200,0,.1);color:#ffc800}
+.pago-parcial{background:rgba(0,120,255,.1);color:#4a9eff}
+.pago-pagado{background:rgba(0,180,100,.1);color:#4ade80}
+.remito-box{background:var(--bg3);border:1px solid var(--border);padding:.85rem 1rem;display:flex;align-items:center;gap:1rem;margin-top:.75rem}
+.remito-icon{font-size:1.5rem;flex-shrink:0}
+.remito-info{flex:1}
+.remito-label{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.2rem}
+.remito-link{color:var(--text1);text-decoration:none;font-size:.85rem;font-weight:500}
+.remito-link:hover{color:var(--rojo)}
+.prod-list-mini{margin:.5rem 0;display:flex;flex-direction:column;gap:.25rem}
+.prod-list-mini li{font-size:.8rem;color:var(--text2);list-style:none;display:flex;justify-content:space-between}
+.prod-list-mini li span{color:var(--text3)}
+/* MENSAJES / CHAT */
+.chat-box{display:flex;flex-direction:column;height:420px;background:var(--bg2);border:1px solid var(--border)}
+.chat-messages{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.6rem}
+.chat-msg{max-width:75%;padding:.6rem .85rem;font-size:.82rem;line-height:1.5;border-radius:2px}
+.chat-msg.from-admin{background:var(--bg3);align-self:flex-start;color:var(--text2)}
+.chat-msg.from-me{background:var(--rojo);align-self:flex-end;color:#fff}
+.chat-msg-meta{font-size:.65rem;opacity:.6;margin-top:.3rem}
+.chat-input-row{display:flex;gap:0;border-top:1px solid var(--border)}
+.chat-input{flex:1;background:var(--negro);border:none;color:var(--text1);font-family:'Barlow',sans-serif;font-size:.85rem;padding:.75rem 1rem;outline:none;resize:none}
+.chat-send-btn{background:var(--rojo);border:none;color:#fff;padding:0 1.25rem;cursor:pointer;font-size:1rem;transition:background .2s;flex-shrink:0}
+.chat-send-btn:hover{background:#a93226}
+
   </style>
 </head>
 <body>
@@ -125,6 +181,8 @@
       <button class="aside-link" onclick="showPage('documentos',this)"><span class="aside-icon">📄</span> Documentos</button>
       <button class="aside-link" onclick="showPage('nuevo-pedido',this)"><span class="aside-icon">🛒</span> Nuevo pedido</button>
       <button class="aside-link" onclick="showPage('mis-pedidos',this)"><span class="aside-icon">📦</span> Mis pedidos</button>
+      <button class="aside-link" onclick="showPage('ofertas',this)"><span class="aside-icon">🏷️</span> Ofertas</button>
+      <button class="aside-link" onclick="showPage('mensajes',this)"><span class="aside-icon">💬</span> Mensajes</button>
     </div>
   </aside>
 
@@ -190,15 +248,42 @@
     </div>
 
     <!-- MIS PEDIDOS -->
+    <!-- MIS PEDIDOS — versión mejorada con tracking -->
     <div class="page" id="page-mis-pedidos">
       <div class="page-header">
         <div class="page-tag">Historial</div>
         <div class="page-title">Mis pedidos</div>
       </div>
-      <table class="pedidos-table">
-        <thead><tr><th>#</th><th>Fecha</th><th>Productos</th><th>Estado</th><th>Remito</th></tr></thead>
-        <tbody id="pedidos-tbody"></tbody>
-      </table>
+      <div id="pedidos-list-new"><div class="empty-state">Cargando...</div></div>
+    </div>
+
+    <!-- OFERTAS -->
+    <div class="page" id="page-ofertas">
+      <div class="page-header">
+        <div class="page-tag">Exclusivo clientes</div>
+        <div class="page-title">Ofertas</div>
+      </div>
+      <div class="oferta-grid" id="ofertas-grid">
+        <div class="empty-state">Cargando ofertas...</div>
+      </div>
+    </div>
+
+    <!-- MENSAJES -->
+    <div class="page" id="page-mensajes">
+      <div class="page-header">
+        <div class="page-tag">Comunicación</div>
+        <div class="page-title">Mensajes</div>
+      </div>
+      <div class="chat-box">
+        <div class="chat-messages" id="chat-messages">
+          <div style="color:var(--text3);font-size:.8rem;text-align:center;padding:2rem">Cargando mensajes...</div>
+        </div>
+        <div class="chat-input-row">
+          <textarea class="chat-input" id="chat-input" placeholder="Escribí tu mensaje a NIVIKO..." rows="1"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMensaje()}"></textarea>
+          <button class="chat-send-btn" onclick="sendMensaje()">➤</button>
+        </div>
+      </div>
     </div>
   </main>
 </div>
@@ -237,6 +322,7 @@ onAuthStateChanged(auth, async user => {
   document.getElementById('nav-user-name').textContent = data.nombre + ' ' + data.apellido;
   document.getElementById('welcome-title').textContent = 'Hola, ' + data.nombre;
   await Promise.all([loadDocumentos(), loadProductos(), loadPedidos()]);
+  renderPedidosNuevo();
 });
 
 window.doLogout = () => signOut(auth).then(() => window.location.href = 'portal.html');
@@ -359,7 +445,7 @@ async function loadPedidos() {
     orderBy('createdAt','desc')
   ));
   allPedidos = snap.docs.map(d => ({id:d.id,...d.data()}));
-  renderPedidosTable();
+  renderPedidosNuevo();
   document.getElementById('stat-pedidos').textContent = allPedidos.length;
   document.getElementById('stat-pendientes').textContent = allPedidos.filter(p => p.estado!=='entregado').length;
   // Últimos 3 en inicio
@@ -426,6 +512,168 @@ function pedidoRowFull(p,num) {
   const remito = p.remitoUrl ? `<a href="${p.remitoUrl}" target="_blank" class="btn-remito">⬇ Remito</a>` : '<span class="no-remito">Pendiente</span>';
   return `<tr><td style="color:var(--text3);font-size:.75rem">#${num}</td><td>${fecha}</td><td>${prods}</td><td>${estadoBadge(p.estado)}</td><td>${remito}</td></tr>`;
 }
+
+// ══════════════════════════════════
+// OFERTAS
+// ══════════════════════════════════
+async function loadOfertas() {
+  const snap = await getDocs(query(collection(db,'ofertas'),
+    where('activa','==',true), orderBy('createdAt','desc')));
+  const ofertas = snap.docs.map(d=>({id:d.id,...d.data()}));
+  const grid = document.getElementById('ofertas-grid');
+  if (!ofertas.length) {
+    grid.innerHTML='<div class="empty-state">No hay ofertas activas por el momento</div>'; return;
+  }
+  grid.innerHTML = ofertas.map(o => {
+    const img = o.imagen
+      ? `<img class="oferta-img" src="${o.imagen}" alt="${o.nombre}" onerror="this.style.display='none'">`
+      : `<div class="oferta-img-placeholder">🏷️</div>`;
+    const precio = o.precio ? `<span class="oferta-precio">$${Number(o.precio).toLocaleString('es-AR')}</span>${o.precioAnterior?`<span class="oferta-precio-old">$${Number(o.precioAnterior).toLocaleString('es-AR')}</span>`:''}` : '';
+    return `<div class="oferta-card">
+      ${img}
+      <div class="oferta-body">
+        <div class="oferta-badge">${o.badge||'Oferta especial'}</div>
+        <div class="oferta-nombre">${o.nombre}</div>
+        <div class="oferta-desc">${o.descripcion||''}</div>
+        ${precio}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════
+// MIS PEDIDOS — con tracking y remito
+// ══════════════════════════════════
+function renderPedidosNuevo() {
+  const el = document.getElementById('pedidos-list-new');
+  if (!allPedidos.length) {
+    el.innerHTML='<div class="empty-state">No realizaste pedidos aún</div>'; return;
+  }
+  const STEPS = [
+    {key:'recibido',   label:'Recibido',       icon:'📥'},
+    {key:'preparacion',label:'Preparando',      icon:'⚙️'},
+    {key:'despachado', label:'Despachado',      icon:'🚚'},
+    {key:'entregado',  label:'Entregado',       icon:'✅'},
+  ];
+  const STEP_IDX = {recibido:0,preparacion:1,despachado:2,entregado:3};
+  el.innerHTML = allPedidos.map((p,i) => {
+    const num = allPedidos.length - i;
+    const fecha = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleDateString('es-AR') : '—';
+    const stepIdx = STEP_IDX[p.estado]??0;
+    const track = STEPS.map((s,si) => {
+      const cls = si < stepIdx ? 'done' : si === stepIdx ? 'done active' : '';
+      return `<div class="track-step ${cls}">
+        <div class="track-dot">${s.icon}</div>
+        <div class="track-label">${s.label}</div>
+      </div>`;
+    }).join('');
+
+    const pagoMap = {pendiente:'pago-pendiente',parcial:'pago-parcial',pagado:'pago-pagado'};
+    const pagoLabel = {pendiente:'Pago pendiente',parcial:'Pago parcial',pagado:'✓ Pagado'};
+    const pagoBadge = p.estadoPago
+      ? `<span class="pago-badge ${pagoMap[p.estadoPago]||'pago-pendiente'}">${pagoLabel[p.estadoPago]||p.estadoPago}</span>` : '';
+
+    const remito = p.remitoUrl
+      ? `<div class="remito-box">
+          <div class="remito-icon">📋</div>
+          <div class="remito-info">
+            <div class="remito-label">Remito adjunto</div>
+            <a href="${p.remitoUrl}" target="_blank" class="remito-link">Ver remito →</a>
+          </div>
+        </div>` : '';
+
+    const prods = `<ul class="prod-list-mini">${(p.productos||[]).map(x=>`<li>${x.nombre}<span>× ${x.cantidad}</span></li>`).join('')}</ul>`;
+    const obs = p.observaciones ? `<p style="font-size:.78rem;color:var(--text3);margin-top:.5rem">💬 ${p.observaciones}</p>` : '';
+
+    return `<div class="pedido-detalle">
+      <div class="pedido-header" onclick="togglePedido('pd-${p.id}')">
+        <div>
+          <div class="pedido-num">Pedido #${num} · ${fecha}</div>
+          <div class="pedido-empresa">${(p.productos||[]).length} producto${p.productos?.length!==1?'s':''}</div>
+        </div>
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+          ${pagoBadge}
+          <span style="color:var(--text3);font-size:.75rem">▾</span>
+        </div>
+      </div>
+      <div class="pedido-body" id="pd-${p.id}">
+        <div class="pedido-track">${track}</div>
+        ${prods}${obs}${remito}
+      </div>
+    </div>`;
+  }).join('');
+}
+window.togglePedido = id => {
+  const el=document.getElementById(id);
+  if(el) el.classList.toggle('open');
+};
+
+// ══════════════════════════════════
+// MENSAJES (chat interno)
+// ══════════════════════════════════
+let mensajesUnsub = null;
+async function loadMensajes() {
+  if (!currentUser) return;
+  const { onSnapshot } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+  const q = query(
+    collection(db,'mensajes'),
+    where('clienteId','==',currentUser.uid),
+    orderBy('createdAt','asc')
+  );
+  if (mensajesUnsub) mensajesUnsub();
+  mensajesUnsub = onSnapshot(q, snap => {
+    const msgs = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderMensajes(msgs);
+  });
+}
+
+function renderMensajes(msgs) {
+  const el = document.getElementById('chat-messages');
+  if (!msgs.length) {
+    el.innerHTML='<div style="color:var(--text3);font-size:.8rem;text-align:center;padding:2rem">Sin mensajes aún. Escribinos cualquier consulta.</div>';
+    return;
+  }
+  el.innerHTML = msgs.map(m => {
+    const fromMe = m.autorRol === 'cliente';
+    const fecha = m.createdAt?.toDate ? m.createdAt.toDate().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}) : '';
+    return `<div class="chat-msg ${fromMe?'from-me':'from-admin'}">
+      ${m.texto}
+      <div class="chat-msg-meta">${m.autorNombre||''} · ${fecha}</div>
+    </div>`;
+  }).join('');
+  el.scrollTop = el.scrollHeight;
+}
+
+window.sendMensaje = async () => {
+  const input = document.getElementById('chat-input');
+  const texto = input.value.trim();
+  if (!texto || !currentUser) return;
+  input.value = '';
+  try {
+    await addDoc(collection(db,'mensajes'), {
+      clienteId: currentUser.uid,
+      clienteNombre: currentUser.nombre + ' ' + currentUser.apellido,
+      clienteEmpresa: currentUser.empresa || '',
+      texto,
+      autorRol: 'cliente',
+      autorNombre: currentUser.nombre,
+      leido: false,
+      createdAt: serverTimestamp()
+    });
+  } catch(e) { console.error(e); }
+};
+
+// ══════════════════════════════════
+// OVERRIDE showPage para cargar datos
+// ══════════════════════════════════
+const _origShowPage = window.showPage;
+window.showPage = (name, btn) => {
+  _origShowPage(name, btn);
+  if (name==='ofertas') loadOfertas();
+  if (name==='mensajes') loadMensajes();
+  if (name==='mis-pedidos') renderPedidosNuevo();
+};
+
 </script>
 </body>
 </html>
