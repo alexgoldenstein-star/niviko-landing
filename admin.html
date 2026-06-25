@@ -1137,9 +1137,19 @@ async function initApp() {
 window.showPage = (name) => {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
+  const page = document.getElementById('page-' + name);
+  if (page) page.classList.add('active');
   const items = document.querySelectorAll('.nav-item');
-  items.forEach(i => { if (i.getAttribute('onclick').includes(name)) i.classList.add('active'); });
+  items.forEach(item => {
+    if (item.getAttribute('onclick')?.includes("'" + name + "'")) item.classList.add('active');
+  });
+  // ── Carga lazy de secciones portal ──────────────────
+  if (name === 'portal-usuarios'  && !allUsuariosPortal.length) loadUsuariosPortal();
+  if (name === 'portal-pedidos'   && !allPedidosPortal.length)  { loadPedidosPortal(); loadVendedores(); }
+  if (name === 'portal-documentos') loadDocumentosPortal();
+  if (name === 'portal-ofertas')    loadOfertasAdmin();
+  if (name === 'portal-mensajes')   loadMensajesAdmin();
+  if (name === 'crm-prospector')    loadCRM();
 };
 
 // ── TOAST ──────────────────────────────────────────────
@@ -1253,18 +1263,34 @@ function renderProductos(list) {
     tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div class="empty-icon">📦</div>No hay productos. Agregá el primero.</td></tr>';
     return;
   }
-  tbody.innerHTML = list.map(p => `
-    <tr>
-      <td>${p.imagen ? `<img class="td-img" src="${p.imagen}" onerror="this.style.display='none'">` : `<div class="td-img-placeholder">📦</div>`}</td>
+  tbody.innerHTML = list.map(p => {
+    // Imagen: primero imagenes[], luego imagen, luego placeholder
+    const imgArr = Array.isArray(p.imagenes) ? p.imagenes.filter(Boolean) : [];
+    const imgUrl = imgArr[0] || p.imagen || '';
+    const imgCell = imgUrl
+      ? `<img class="td-img" src="${imgUrl}" alt="${p.nombre||''}" onerror="this.src='';this.style.display='none';this.nextElementSibling.style.display='flex'">`
+      : '';
+    const placeholder = `<div class="td-img-placeholder" style="${imgUrl?'display:none':''}">📦</div>`;
+
+    // Categoria: mostrar nombre legible buscando en allCategorias
+    const catObj = allCategorias.find(c => c.id === p.categoria || c.nombre === p.categoria);
+    const catLabel = catObj ? catObj.nombre : (p.categoria || '—');
+
+    const estado = p.activo !== false
+      ? '<span class="badge badge-active">ACTIVO</span>'
+      : '<span class="badge badge-inactive">INACTIVO</span>';
+    return `<tr>
+      <td><div style="position:relative;width:48px;height:48px">${imgCell}${placeholder}</div></td>
       <td class="td-name">${p.nombre||'—'}</td>
-      <td style="color:var(--text2);font-size:0.82rem">${p.categoria||'—'}</td>
-      <td style="color:var(--text3);font-size:0.78rem;font-family:'Barlow Condensed',sans-serif">${p.sku||'—'}</td>
-      <td><span class="badge ${p.activo!==false?'badge-active':'badge-inactive'}">${p.activo!==false?'Activo':'Inactivo'}</span></td>
+      <td style="color:var(--text2);font-size:0.82rem">${catLabel}</td>
+      <td style="font-size:0.82rem;color:var(--text3)">${p.sku||'—'}</td>
+      <td>${estado}</td>
       <td>
         <button class="action-btn" onclick="editProducto('${p.id}')">Editar</button>
         <button class="action-btn danger" onclick="deleteProducto('${p.id}')">Eliminar</button>
       </td>
-    </tr>`).join('');
+    </tr>`;
+  }).join('');
 }
 
 window.filterProductos = () => {
@@ -1777,14 +1803,7 @@ let allDocumentosPortal = [];
 let allVendedores = [];
 let currentFilterUsuarios = 'pendiente';
 
-// ── Carga inicial cuando se entra a una página portal ──
-const origShowPage = window.showPage;
-window.showPage = (name) => {
-  origShowPage(name);
-  if (name === 'portal-usuarios' && !allUsuariosPortal.length) loadUsuariosPortal();
-  if (name === 'portal-pedidos'  && !allPedidosPortal.length)  loadPedidosPortal();
-  if (name === 'portal-documentos') loadDocumentosPortal();
-};
+
 
 // ── USUARIOS ──────────────────────────────────────────
 async function loadUsuariosPortal() {
@@ -1885,6 +1904,11 @@ async function loadPedidosPortal() {
   renderPedidosPortal();
 }
 
+
+async function loadVendedores() {
+  if (allVendedores.length) return; // ya cargados
+  if (!allUsuariosPortal.length) await loadUsuariosPortal();
+}
 window.renderPedidosPortal = () => {
   const filtroEstado = document.getElementById('filter-estado-pedido')?.value || '';
   const filtered = filtroEstado ? allPedidosPortal.filter(p=>p.estado===filtroEstado) : allPedidosPortal;
@@ -2115,17 +2139,7 @@ function resetGallery() {
 // ADMIN — Ofertas, Remito JPG, Estado Pago, Mensajes, CRM
 // ══════════════════════════════════════════════════════
 
-// ─── OVERRIDE showPage para cargar datos de portal ────
-const _adminShowPage = window.showPage;
-window.showPage = (name) => {
-  _adminShowPage(name);
-  if (name === 'portal-usuarios'  && !allUsuariosPortal.length) loadUsuariosPortal();
-  if (name === 'portal-pedidos'   && !allPedidosPortal.length)  loadPedidosPortal();
-  if (name === 'portal-documentos') loadDocumentosPortal();
-  if (name === 'portal-ofertas')    loadOfertasAdmin();
-  if (name === 'portal-mensajes')   loadMensajesAdmin();
-  if (name === 'crm-prospector')    loadCRM();
-};
+
 
 // ─── REMITO JPG: upload desde admin en portal-pedidos ─
 window.uploadRemitoJpg = async (input, pedidoId) => {
@@ -2210,11 +2224,7 @@ window.renderPedidosPortal = () => {
   }).join('');
 };
 
-// Actualizar header tabla pedidos para incluir nuevas columnas
-const pedidosTable = document.querySelector('#page-portal-pedidos thead tr');
-if (pedidosTable) {
-  pedidosTable.innerHTML = '<th>#</th><th>Cliente</th><th>Empresa</th><th>Vendedor</th><th>Fecha</th><th>Productos</th><th>Estado</th><th>Pago</th><th>Remito</th><th></th>';
-}
+
 
 // ─── OFERTAS ADMIN ─────────────────────────────────────
 let allOfertasAdmin = [];
